@@ -1,34 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:background="#ff000000">
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#ff000000"
+    android:weightSum="30"
+    >
 
     <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/create"
-            android:id="@+id/textView2"
-            android:layout_gravity="center"
-            android:textColor="#ffffffff"
-            android:textSize="30sp"
-            android:layout_marginTop="20dp"/>
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:text="@string/create"
+        android:id="@+id/textView2"
+        android:layout_gravity="center"
+        android:textColor="#ffffffff"
+        android:textSize="30sp"
+        android:layout_marginTop="20dp"
+        android:layout_weight="5"
+        />
 
     <EditText
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:inputType="textPersonName"
-            android:ems="10"
-            android:id="@+id/editText"
-            android:layout_gravity="center"
-            android:layout_marginTop="60dp"/>
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:inputType="textPersonName"
+        android:ems="10"
+        android:id="@+id/editText"
+        android:layout_gravity="center"
+        android:layout_marginTop="60dp"
+        android:layout_weight="5"
+        />
 
     <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/ok"
-            android:id="@+id/okGo"
-            android:layout_gravity="center"
-            android:layout_marginTop="30dp"/>
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:text="@string/ok"
+        android:id="@+id/okGo"
+        android:layout_gravity="center"
+        android:layout_marginTop="30dp"
+        android:background="@drawable/button_bg1x200"
+        android:layout_weight="7"
+        />
 </LinearLayout>
