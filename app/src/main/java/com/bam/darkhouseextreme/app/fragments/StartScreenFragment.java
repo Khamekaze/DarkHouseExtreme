@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+
 import com.bam.darkhouseextreme.app.R;
 import com.bam.darkhouseextreme.app.utilities.Utilities;
 
@@ -41,9 +42,9 @@ public class StartScreenFragment extends Fragment {
         manager = getActivity().getSupportFragmentManager();
 
         final View root = inflater.inflate(R.layout.startscreenfragment, container, false);
-        newGame = (Button)root.findViewById(R.id.newGame);
-        selectCharacter = (Button)root.findViewById(R.id.selectCharacter);
-        quit = (Button)root.findViewById(R.id.quit);
+        newGame = (Button) root.findViewById(R.id.newGame);
+        selectCharacter = (Button) root.findViewById(R.id.selectCharacter);
+        quit = (Button) root.findViewById(R.id.quit);
         newGame.setTypeface(font);
         newGame();
 
