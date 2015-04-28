@@ -8,6 +8,8 @@
     <string name="ok">OK</string>
     <string name="select_character">Select character</string>
     <string name="delete_character">Delete character</string>
+    <string name="list_element">Character Name</string>
+    <string name="progress">100%</string>
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
