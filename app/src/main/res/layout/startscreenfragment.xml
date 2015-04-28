@@ -3,7 +3,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#ff000000">
+    android:background="@drawable/main_bg">
 
     <TextView
         android:layout_width="wrap_content"
@@ -29,7 +29,7 @@
             android:id="@+id/newGame"
             android:layout_gravity="center"
             android:layout_marginTop="50dp"
-            android:background="@drawable/button_bg1x200"
+            android:background="@drawable/button_bg1"
             android:layout_weight="12"
             />
 
@@ -40,7 +40,7 @@
             android:id="@+id/selectCharacter"
             android:layout_gravity="center"
             android:layout_marginTop="20dp"
-            android:background="@drawable/button_bg1x200"
+            android:background="@drawable/button_bg2"
             android:layout_weight="12"
             />
 
@@ -51,7 +51,7 @@
             android:id="@+id/quit"
             android:layout_gravity="center"
             android:layout_marginTop="20dp"
-            android:background="@drawable/button_bg1x200"
+            android:background="@drawable/button_bg3"
             android:layout_weight="12"
             />
     </LinearLayout>

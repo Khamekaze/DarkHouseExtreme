@@ -3,7 +3,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#ff000000"
+    android:background="@drawable/main_bg"
     android:weightSum="30"
     >
 
@@ -37,7 +37,7 @@
         android:id="@+id/okGo"
         android:layout_gravity="center"
         android:layout_marginTop="30dp"
-        android:background="@drawable/button_bg1x200"
+        android:background="@drawable/button_bg1"
         android:layout_weight="7"
         />
 </LinearLayout>
