@@ -110,22 +110,35 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return true;
     }
 
-    public void addObjectToPlayerInventory(String playerId, String objectId) {
+    public boolean addObjectToPlayerInventory(String playerId, String objectId) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(PLAYER_OBJ_IDS, objectId);
         String whereClause = " WHERE " + PLAYER_ID + " = ?";
         String[] whereArgs = {playerId};
-        db.update(PLAYER_TABLE_NAME, contentValues, whereClause, whereArgs);
+
+        int i = db.update(PLAYER_TABLE_NAME, contentValues, whereClause, whereArgs);
+        if (i == -1) {
+            return false;
+        } else {
+            return true;
+        }
     }
 
-    public void removeObjectFromInventory(String playerId, String objectId) {
+    public boolean removeObjectFromInventory(String playerId, String objectId) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         String whereClause = " WHERE Id in" + "(SELECT Id FROM" + PLAYER_ITEM_JUNCTION_TABLE_NAME +
                 "WHERE " + PLAYER_ID + " = ? AND " + ITEM_ID + " = ? LIMIT 1)";
         String[] whereArgs = {playerId, objectId};
-        db.delete(PLAYER_ITEM_JUNCTION_TABLE_NAME, whereClause, whereArgs);
+
+        int i = db.delete(PLAYER_ITEM_JUNCTION_TABLE_NAME, whereClause, whereArgs);
+
+          if (i == -1) {
+            return false;
+        } else {
+            return true;
+        }
 
 //        Alternatively:
 //        This is probably a worse way of doing the same thing as above but I'm keeping it 'til we know for sure that it works.
