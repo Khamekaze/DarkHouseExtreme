@@ -9,7 +9,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 /**
  * Created by Anders on 2015-04-28.
  */
-public class DatabaseHelper extends SQLiteOpenHelper{
+public class DatabaseHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "DarkHouse.db";
     private static final int DATABASE_VERSION = 1;
@@ -26,7 +26,7 @@ public class DatabaseHelper extends SQLiteOpenHelper{
     private static final String ITEM_NAME = "Name";
     private static final String ITEM_DESCRIPTION = "Description";
 
-    private static final String PLAYER_ITEM_JOIN_TABLE_NAME = "Player_Item";
+    private static final String PLAYER_ITEM_JUNCTION_TABLE_NAME = "Player_Item";
     private static final String PLAYER_ITEM_ID = "Id";
 
     public DatabaseHelper(Context context) {
@@ -43,7 +43,7 @@ public class DatabaseHelper extends SQLiteOpenHelper{
                         + ITEM_NAME + " TEXT, " + ITEM_DESCRIPTION + " TEXT)"
         );
 
-        db.execSQL("CREATE TABLE IF NOT EXISTS" + PLAYER_ITEM_JOIN_TABLE_NAME + " (" + PLAYER_ITEM_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+        db.execSQL("CREATE TABLE IF NOT EXISTS" + PLAYER_ITEM_JUNCTION_TABLE_NAME + " (" + PLAYER_ITEM_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
                         + PLAYER_ID + " TEXT REFERENCES " + PLAYER_TABLE_NAME + ", " + ITEM_ID + " TEXT REFERENCES" + ITEM_TABLE_NAME + ")"
         );
     }
@@ -90,7 +90,7 @@ public class DatabaseHelper extends SQLiteOpenHelper{
         contentValues.put(PLAYER_MAP_Y, mapYCoordinate);
         contentValues.put(PLAYER_SCORE, score);
         String whereClause = " WHERE " + PLAYER_ID + " = ?";
-        String [] whereArgs = {id};
+        String[] whereArgs = {id};
         db.update(PLAYER_TABLE_NAME, contentValues, whereClause, whereArgs);
 
         for (String s : objectIds) {
@@ -118,11 +118,19 @@ public class DatabaseHelper extends SQLiteOpenHelper{
         String[] whereArgs = {playerId};
         db.update(PLAYER_TABLE_NAME, contentValues, whereClause, whereArgs);
     }
+
     public void removeObjectFromInventory(String playerId, String objectId) {
         SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues contentValues = new ContentValues();
 
-        //TODO: Correct the line below.
-        db.execSQL("DELETE " + PLAYER_OBJ_IDS + "FROM " + PLAYER_TABLE_NAME + "WHERE " + PLAYER_ID + " = " + playerId + " AND " + PLAYER_OBJ_IDS + " = " + objectId );
+        String whereClause = " WHERE Id in" + "(SELECT Id FROM" + PLAYER_ITEM_JUNCTION_TABLE_NAME +
+                "WHERE " + PLAYER_ID + " = ? AND " + ITEM_ID + " = ? LIMIT 1)";
+        String[] whereArgs = {playerId, objectId};
+        db.delete(PLAYER_ITEM_JUNCTION_TABLE_NAME, whereClause, whereArgs);
+
+//        Alternatively:
+//        This is probably a worse way of doing the same thing as above but I'm keeping it 'til we know for sure that it works.
+//        String whereClause = " WHERE " + PLAYER_ID + " = ? AND " + ITEM_ID + " = ? LIMIT 1";
+//        String[] whereArgs = {playerId, objectId};
+//        db.delete(PLAYER_ITEM_JUNCTION_TABLE_NAME, whereClause, whereArgs);
     }
 }
