@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import com.bam.darkhouseextreme.app.R;
+import com.bam.darkhouseextreme.app.utilities.Utilities;
 
 /**
  * Created by Chobii on 28/04/15.
@@ -40,6 +41,8 @@ public class StartScreenFragment extends Fragment {
         quit = (Button)root.findViewById(R.id.quit);
         newGame.setTypeface(font);
         newGame();
+
+        Utilities.setFontForView(root, font);
 
         return root;
 
