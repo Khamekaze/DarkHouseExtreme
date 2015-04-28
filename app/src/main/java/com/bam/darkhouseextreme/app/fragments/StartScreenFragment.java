@@ -1,5 +1,6 @@
 package com.bam.darkhouseextreme.app.fragments;
 
+import android.content.Context;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -24,12 +25,16 @@ public class StartScreenFragment extends Fragment {
     public FragmentManager manager;
     public ViewGroup container;
 
+    private Context context;
+
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        final Typeface font = Typeface.createFromAsset(getActivity().getApplicationContext().getAssets(), "fonts/MISFITS_.TTF");
+        context = getActivity().getApplicationContext();
+
+        final Typeface font = Typeface.createFromAsset(context.getAssets(), "fonts/MISFITS_.TTF");
 
         this.container = container;
 
