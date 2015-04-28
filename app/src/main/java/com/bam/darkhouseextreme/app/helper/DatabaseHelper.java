@@ -75,7 +75,7 @@ public class DatabaseHelper extends SQLiteOpenHelper{
         contentValues.put(MAP_X, mapXCoordinate);
         contentValues.put(MAP_Y, mapYCoordinate);
         contentValues.put(SCORE, score);
-        String whereClause = "WHERE ID = ?";
+        String whereClause = " WHERE ID = ?";
         String [] whereArgs = {id};
         db.update(TABLE_NAME, contentValues, whereClause, whereArgs);
 
@@ -89,7 +89,7 @@ public class DatabaseHelper extends SQLiteOpenHelper{
     public boolean deleteCharacter(String id) {
 
         SQLiteDatabase db = this.getWritableDatabase();
-        String whereClause = "WHERE ID = ?";
+        String whereClause = " WHERE ID = ?";
         String[] whereArgs = {id};
         db.delete(TABLE_NAME, whereClause, whereArgs);
 
@@ -100,7 +100,7 @@ public class DatabaseHelper extends SQLiteOpenHelper{
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(OBJ_IDS, objectId);
-        String whereClause = "WHERE ID = ?";
+        String whereClause = " WHERE ID = ?";
         String[] whereArgs = {playerId};
         db.update(TABLE_NAME, contentValues, whereClause, whereArgs);
     }
@@ -108,14 +108,7 @@ public class DatabaseHelper extends SQLiteOpenHelper{
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
 
+        //TODO: Correct the line below.
         db.execSQL("DELETE " + OBJ_IDS + "FROM " + TABLE_NAME + "WHERE " + ID + " = " + playerId + " AND " + OBJ_IDS + " = " + objectId );
-
-        contentValues.put(OBJ_IDS, objectId);
-        String whereClause = "WHERE ID = ?";
-        String[] whereArgs = {playerId};
-        db.update(TABLE_NAME, contentValues, whereClause, whereArgs);
     }
-
-
-
 }
