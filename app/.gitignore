@@ -1,0 +1,17 @@
+#IntelliJ specific files
+*.iml
+.idea
+*.iws
+
+#Android
+.gradle
+local.properties
+/build
+*.apk
+*.ap_
+
+#Java classes
+*.class
+
+#OSX file
+.DS_Store
