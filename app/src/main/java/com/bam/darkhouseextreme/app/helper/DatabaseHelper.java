@@ -36,14 +36,14 @@ public class DatabaseHelper extends SQLiteOpenHelper{
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL("CREATE TABLE " + PLAYER_TABLE_NAME + " (" + PLAYER_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+        db.execSQL("CREATE TABLE IF NOT EXISTS" + PLAYER_TABLE_NAME + " (" + PLAYER_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
                         + PLAYER_NAME + " TEXT, " + PLAYER_MAP_X + " INTEGER, " + PLAYER_MAP_Y + " INTEGER, " + PLAYER_OBJ_IDS + " INTEGER)"
         );
-        db.execSQL("CREATE TABLE " + ITEM_TABLE_NAME + " (" + ITEM_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+        db.execSQL("CREATE TABLE IF NOT EXISTS" + ITEM_TABLE_NAME + " (" + ITEM_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
                         + ITEM_NAME + " TEXT, " + ITEM_DESCRIPTION + " TEXT)"
         );
 
-        db.execSQL("CREATE TABLE " + PLAYER_ITEM_JOIN_TABLE_NAME + " (" + PLAYER_ITEM_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+        db.execSQL("CREATE TABLE IF NOT EXISTS" + PLAYER_ITEM_JOIN_TABLE_NAME + " (" + PLAYER_ITEM_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
                         + PLAYER_ID + " TEXT REFERENCES " + PLAYER_TABLE_NAME + ", " + ITEM_ID + " TEXT REFERENCES" + ITEM_TABLE_NAME + ")"
         );
     }
@@ -110,7 +110,7 @@ public class DatabaseHelper extends SQLiteOpenHelper{
         return true;
     }
 
-    public void addObjectToInventory(String playerId, String objectId) {
+    public void addObjectToPlayerInventory(String playerId, String objectId) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(PLAYER_OBJ_IDS, objectId);
