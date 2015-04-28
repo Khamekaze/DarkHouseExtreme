@@ -11,16 +11,23 @@ import android.database.sqlite.SQLiteOpenHelper;
  */
 public class DatabaseHelper extends SQLiteOpenHelper{
 
-
     private static final String DATABASE_NAME = "DarkHouse.db";
     private static final int DATABASE_VERSION = 1;
-    private static final String TABLE_NAME = "Player";
-    private static final String ID = "Id";
-    private static final String NAME = "Name";
-    private static final String MAP_X = "MapXCoordinate";
-    private static final String MAP_Y = "MapYCoordinate";
-    private static final String OBJ_IDS = "ObjectIds";
-    private static final String SCORE = "Score";
+    private static final String PLAYER_TABLE_NAME = "Player";
+    private static final String PLAYER_ID = "Id";
+    private static final String PLAYER_NAME = "Name";
+    private static final String PLAYER_MAP_X = "MapXCoordinate";
+    private static final String PLAYER_MAP_Y = "MapYCoordinate";
+    private static final String PLAYER_OBJ_IDS = "ObjectIds";
+    private static final String PLAYER_SCORE = "Score";
+
+    private static final String ITEM_TABLE_NAME = "Item";
+    private static final String ITEM_ID = "Id";
+    private static final String ITEM_NAME = "Name";
+    private static final String ITEM_DESCRIPTION = "Description";
+
+    private static final String PLAYER_ITEM_JOIN_TABLE_NAME = "Player_Item";
+    private static final String PLAYER_ITEM_ID = "Id";
 
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -29,22 +36,29 @@ public class DatabaseHelper extends SQLiteOpenHelper{
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL("CREATE TABLE " + TABLE_NAME + " (" + ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-                        + NAME + " TEXT, " + MAP_X + " INTEGER, " + MAP_Y + " INTEGER, " + OBJ_IDS + " INTEGER)"
+        db.execSQL("CREATE TABLE " + PLAYER_TABLE_NAME + " (" + PLAYER_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                        + PLAYER_NAME + " TEXT, " + PLAYER_MAP_X + " INTEGER, " + PLAYER_MAP_Y + " INTEGER, " + PLAYER_OBJ_IDS + " INTEGER)"
+        );
+        db.execSQL("CREATE TABLE " + ITEM_TABLE_NAME + " (" + ITEM_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                        + ITEM_NAME + " TEXT, " + ITEM_DESCRIPTION + " TEXT)"
+        );
+
+        db.execSQL("CREATE TABLE " + PLAYER_ITEM_JOIN_TABLE_NAME + " (" + PLAYER_ITEM_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                        + PLAYER_ID + " TEXT REFERENCES " + PLAYER_TABLE_NAME + ", " + ITEM_ID + " TEXT REFERENCES" + ITEM_TABLE_NAME + ")"
         );
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("DROP IF EXISTS TABLE " + TABLE_NAME);
+        db.execSQL("DROP IF EXISTS TABLE " + PLAYER_TABLE_NAME);
         onCreate(db);
     }
 
     public boolean insertData(String name) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
-        contentValues.put(NAME, name);
-        long result = db.insert(TABLE_NAME, null, contentValues);
+        contentValues.put(PLAYER_NAME, name);
+        long result = db.insert(PLAYER_TABLE_NAME, null, contentValues);
 
         db.close();
 
@@ -57,14 +71,14 @@ public class DatabaseHelper extends SQLiteOpenHelper{
 
     public Cursor getOneCharacter(String id) {
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_NAME + "WHERE " + ID + " = " + id, null);
+        Cursor cursor = db.rawQuery("SELECT * FROM " + PLAYER_TABLE_NAME + "WHERE " + PLAYER_ID + " = " + id, null);
         db.close();
         return cursor;
     }
 
     public Cursor getAllCharacters() {
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_NAME, null);
+        Cursor cursor = db.rawQuery("SELECT * FROM " + PLAYER_TABLE_NAME, null);
         db.close();
         return cursor;
     }
@@ -72,16 +86,16 @@ public class DatabaseHelper extends SQLiteOpenHelper{
     public boolean updateCharacter(String id, String mapXCoordinate, String mapYCoordinate, int score, String[] objectIds) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
-        contentValues.put(MAP_X, mapXCoordinate);
-        contentValues.put(MAP_Y, mapYCoordinate);
-        contentValues.put(SCORE, score);
-        String whereClause = " WHERE ID = ?";
+        contentValues.put(PLAYER_MAP_X, mapXCoordinate);
+        contentValues.put(PLAYER_MAP_Y, mapYCoordinate);
+        contentValues.put(PLAYER_SCORE, score);
+        String whereClause = " WHERE " + PLAYER_ID + " = ?";
         String [] whereArgs = {id};
-        db.update(TABLE_NAME, contentValues, whereClause, whereArgs);
+        db.update(PLAYER_TABLE_NAME, contentValues, whereClause, whereArgs);
 
         for (String s : objectIds) {
-            contentValues.put(OBJ_IDS, s);
-            db.update(TABLE_NAME, contentValues, whereClause, whereArgs);
+            contentValues.put(PLAYER_OBJ_IDS, s);
+            db.update(PLAYER_TABLE_NAME, contentValues, whereClause, whereArgs);
         }
         return true;
     }
@@ -89,9 +103,9 @@ public class DatabaseHelper extends SQLiteOpenHelper{
     public boolean deleteCharacter(String id) {
 
         SQLiteDatabase db = this.getWritableDatabase();
-        String whereClause = " WHERE ID = ?";
+        String whereClause = " WHERE " + PLAYER_ID + " = ?";
         String[] whereArgs = {id};
-        db.delete(TABLE_NAME, whereClause, whereArgs);
+        db.delete(PLAYER_TABLE_NAME, whereClause, whereArgs);
 
         return true;
     }
@@ -99,16 +113,16 @@ public class DatabaseHelper extends SQLiteOpenHelper{
     public void addObjectToInventory(String playerId, String objectId) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
-        contentValues.put(OBJ_IDS, objectId);
-        String whereClause = " WHERE ID = ?";
+        contentValues.put(PLAYER_OBJ_IDS, objectId);
+        String whereClause = " WHERE " + PLAYER_ID + " = ?";
         String[] whereArgs = {playerId};
-        db.update(TABLE_NAME, contentValues, whereClause, whereArgs);
+        db.update(PLAYER_TABLE_NAME, contentValues, whereClause, whereArgs);
     }
     public void removeObjectFromInventory(String playerId, String objectId) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
 
         //TODO: Correct the line below.
-        db.execSQL("DELETE " + OBJ_IDS + "FROM " + TABLE_NAME + "WHERE " + ID + " = " + playerId + " AND " + OBJ_IDS + " = " + objectId );
+        db.execSQL("DELETE " + PLAYER_OBJ_IDS + "FROM " + PLAYER_TABLE_NAME + "WHERE " + PLAYER_ID + " = " + playerId + " AND " + PLAYER_OBJ_IDS + " = " + objectId );
     }
 }
