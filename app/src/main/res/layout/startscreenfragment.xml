@@ -28,7 +28,7 @@
         <Button
             android:layout_width="wrap_content"
             android:layout_height="0dp"
-            android:text="@string/buttonz"
+            android:text="@string/new_game_button"
             android:id="@+id/newGame"
             android:layout_gravity="center"
             android:layout_marginTop="50dp"
@@ -41,7 +41,7 @@
         <Button
             android:layout_width="wrap_content"
             android:layout_height="0dp"
-            android:text="@string/buttonz"
+            android:text="@string/load_game_button"
             android:id="@+id/selectCharacter"
             android:layout_gravity="center"
             android:layout_marginTop="20dp"
@@ -54,7 +54,7 @@
         <Button
             android:layout_width="wrap_content"
             android:layout_height="0dp"
-            android:text="@string/buttonz"
+            android:text="@string/undecided_button"
             android:id="@+id/quit"
             android:layout_gravity="center"
             android:layout_marginTop="20dp"

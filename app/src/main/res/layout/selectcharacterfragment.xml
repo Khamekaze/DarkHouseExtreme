@@ -1,8 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:background="#ff000000">
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/main_bg"
+    android:weightSum="40"
+    >
+    <ListView
+        android:layout_weight="20"
+        android:id="@+id/characterList"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        >
 
+
+        </ListView>
+    <LinearLayout
+        android:layout_weight="20"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="bottom|center"
+        android:weightSum="30"
+        >
+
+        <Button
+            android:layout_weight="5"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:id="@+id/deleteCharacter"
+            android:background="@drawable/button_bg2"
+            android:text="@string/delete_character"
+            android:layout_marginBottom="20dp"
+            />
+
+        <Button
+            android:layout_weight="5"
+            android:id="@+id/selectCharacter"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:background="@drawable/button_bg1"
+            android:text="@string/select_character"
+            android:layout_marginBottom="20dp"
+
+            />
+
+
+        </LinearLayout>
 </LinearLayout>
