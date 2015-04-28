@@ -13,7 +13,10 @@
         android:layout_gravity="center"
         android:textSize="30sp"
         android:layout_marginTop="20dp"
-        android:textColor="#ffffffff" />
+        android:textColor="#ffffffff"
+        android:layout_marginRight="100dp"
+        android:layout_marginEnd="100dp"
+        />
 
     <LinearLayout
         android:orientation="vertical"
@@ -31,6 +34,8 @@
             android:layout_marginTop="50dp"
             android:background="@drawable/button_bg1"
             android:layout_weight="12"
+            android:layout_marginRight="100dp"
+            android:layout_marginEnd="100dp"
             />
 
         <Button
@@ -42,6 +47,8 @@
             android:layout_marginTop="20dp"
             android:background="@drawable/button_bg2"
             android:layout_weight="12"
+            android:layout_marginRight="100dp"
+            android:layout_marginEnd="100dp"
             />
 
         <Button
@@ -53,6 +60,8 @@
             android:layout_marginTop="20dp"
             android:background="@drawable/button_bg3"
             android:layout_weight="12"
+            android:layout_marginRight="100dp"
+            android:layout_marginEnd="100dp"
             />
     </LinearLayout>
 </LinearLayout>
