@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">DarkHouseExtreme</string>
+    <string name="darkhouse">Dark House of Mystery</string>
+    <string name="buttonz">New Game</string>
+    <string name="create">Create Character</string>
+    <string name="ok">OK</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+</resources>
