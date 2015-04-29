@@ -10,8 +10,8 @@ import java.util.List;
 public class Player implements Serializable {
     private long id;
     private String name;
-    private Integer mapXCoordinate;
-    private Integer mapYCoordinate;
+    private int mapXCoordinate;
+    private int mapYCoordinate;
     private List<Integer> objectIds = new ArrayList<>();
     private int score;
 
