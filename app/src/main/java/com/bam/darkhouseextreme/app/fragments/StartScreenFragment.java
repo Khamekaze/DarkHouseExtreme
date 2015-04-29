@@ -22,7 +22,7 @@ public class StartScreenFragment extends Fragment {
 
     public final String LOG_DATA = StartScreenFragment.class.getSimpleName();
 
-    public Button newGame, quit, selectCharacter;
+    public Button newGame, quit, loadGame;
     public FragmentManager manager;
     public ViewGroup container;
 
@@ -43,10 +43,11 @@ public class StartScreenFragment extends Fragment {
 
         final View root = inflater.inflate(R.layout.startscreenfragment, container, false);
         newGame = (Button) root.findViewById(R.id.newGame);
-        selectCharacter = (Button) root.findViewById(R.id.selectCharacter);
+        loadGame = (Button) root.findViewById(R.id.loadGameButton);
         quit = (Button) root.findViewById(R.id.quit);
         newGame.setTypeface(font);
         newGame();
+        loadGame();
 
         Utilities.setFontForView(root, font);
 
@@ -71,5 +72,20 @@ public class StartScreenFragment extends Fragment {
                     }
                 }
         );
+    }
+
+    public void loadGame() {
+        loadGame.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentTransaction transaction = manager.beginTransaction();
+                transaction.setCustomAnimations(R.anim.enter, R.anim.exit);
+
+                SelectCharacterFragment selectCharacterFragment = new SelectCharacterFragment();
+                transaction.replace(R.id.startscreenlayout, selectCharacterFragment);
+                transaction.addToBackStack(null);
+                transaction.commit();
+            }
+        });
     }
 }
