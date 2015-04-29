@@ -17,7 +17,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private final String LOG_DATA = DatabaseHelper.class.getSimpleName();
 
     private static final String DATABASE_NAME = "DarkHouse.db";
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
     private static final String PLAYER_TABLE_NAME = "Player";
     private static final String PLAYER_ID = "Id";
     private static final String PLAYER_NAME = "Name";
@@ -33,8 +33,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     private static final String PLAYER_ITEM_JUNCTION_TABLE_NAME = "Player_Item";
     private static final String PLAYER_ITEM_ID = "Id";
-    private static final String JUNCTION_TABLE_PLAYER_ID = PLAYER_ID;
-    private static final String JUNCTION_TABLE_ITEM_ID = ITEM_ID;
+    private static final String JUNCTION_TABLE_PLAYER_ID = "Player_Id";
+    private static final String JUNCTION_TABLE_ITEM_ID = "Item_Id";
 
     private SQLiteDatabase db;
 
@@ -71,10 +71,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.close();
 
         if (rowId == -1) {
-
             Log.v(LOG_DATA, "Failed");
             return null;
-
         } else {
             Log.v(LOG_DATA, "Success");
             return new Player(rowId, name);

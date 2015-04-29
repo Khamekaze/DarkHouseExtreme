@@ -1,10 +1,8 @@
 package com.bam.darkhouseextreme.app;
 
-import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.test.ActivityInstrumentationTestCase2;
-import android.test.RenamingDelegatingContext;
 
 import com.bam.darkhouseextreme.app.activities.StartScreenActivity;
 import com.bam.darkhouseextreme.app.helper.DatabaseHelper;
@@ -33,11 +31,10 @@ public class DatabaseHelperTest extends ActivityInstrumentationTestCase2<StartSc
 
     public void testCreateCharacter() {
         String name = "Mugabe";
-        Player id = databaseHelper.createCharacter(name);
-        boolean finished = id.getId() != -1;
+        Player player = databaseHelper.createCharacter(name);
+        boolean finished = player.getId() != -1;
 
         assertTrue(finished);
-
     }
 
     @Override
