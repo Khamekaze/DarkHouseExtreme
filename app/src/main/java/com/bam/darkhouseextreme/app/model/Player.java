@@ -1,12 +1,13 @@
 package com.bam.darkhouseextreme.app.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by Anders on 2015-04-28.
  */
-public class Player {
+public class Player implements Serializable {
     private long id;
     private String name;
     private Integer mapXCoordinate;

@@ -6,12 +6,15 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import android.util.Log;
 import com.bam.darkhouseextreme.app.model.Player;
 
 /**
  * Created by Anders on 2015-04-28.
  */
 public class DatabaseHelper extends SQLiteOpenHelper {
+
+    private final String LOG_DATA = DatabaseHelper.class.getSimpleName();
 
     private static final String DATABASE_NAME = "DarkHouse.db";
     private static final int DATABASE_VERSION = 1;
@@ -32,6 +35,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String PLAYER_ITEM_ID = "Id";
     private static final String JUNCTION_TABLE_PLAYER_ID = PLAYER_ID;
     private static final String JUNCTION_TABLE_ITEM_ID = ITEM_ID;
+
+    private SQLiteDatabase db;
 
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -58,7 +63,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     public Player createCharacter(String name) {
-        SQLiteDatabase db = this.getWritableDatabase();
+        db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(PLAYER_NAME, name);
         long rowId = db.insert(PLAYER_TABLE_NAME, null, contentValues);
@@ -66,14 +71,18 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.close();
 
         if (rowId == -1) {
+
+            Log.v(LOG_DATA, "Failed");
             return null;
+
         } else {
+            Log.v(LOG_DATA, "Success");
             return new Player(rowId, name);
         }
     }
 
     public Cursor getOneCharacter(String id) {
-        SQLiteDatabase db = this.getReadableDatabase();
+        db = this.getReadableDatabase();
         String[] selection = {id};
         Cursor cursor = db.rawQuery("SELECT * FROM " + PLAYER_TABLE_NAME + " WHERE " + PLAYER_ID + " = ?" , selection);
         db.close();
@@ -81,14 +90,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     public Cursor getAllCharacters() {
-        SQLiteDatabase db = this.getReadableDatabase();
+        db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery("SELECT * FROM " + PLAYER_TABLE_NAME, null);
         db.close();
         return cursor;
     }
 
     public boolean updateCharacter(String id, String mapXCoordinate, String mapYCoordinate, int score, String[] objectIds) {
-        SQLiteDatabase db = this.getWritableDatabase();
+        db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(PLAYER_MAP_X, mapXCoordinate);
         contentValues.put(PLAYER_MAP_Y, mapYCoordinate);
@@ -106,7 +115,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public boolean deleteCharacter(String id) {
 
-        SQLiteDatabase db = this.getWritableDatabase();
+        db = this.getWritableDatabase();
         String whereClause = " WHERE " + PLAYER_ID + " = ?";
         String[] whereArgs = {id};
         db.delete(PLAYER_TABLE_NAME, whereClause, whereArgs);
@@ -115,7 +124,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     public boolean addObjectToPlayerInventory(String playerId, String objectId) {
-        SQLiteDatabase db = this.getWritableDatabase();
+        db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(PLAYER_OBJ_IDS, objectId);
         String whereClause = " WHERE " + PLAYER_ID + " = ?";
@@ -130,7 +139,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     public Cursor getAllObjectsFromCharacter(String id) {
-        SQLiteDatabase db = this.getReadableDatabase();
+        db = this.getReadableDatabase();
         String[] selection = {id};
         Cursor cursor = db.rawQuery("SELECT * FROM " + PLAYER_ITEM_JUNCTION_TABLE_NAME + " WHERE " + PLAYER_ID + " = ?", selection);
         db.close();
@@ -138,7 +147,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     public boolean removeObjectFromInventory(String playerId, String objectId) {
-        SQLiteDatabase db = this.getWritableDatabase();
+        db = this.getWritableDatabase();
 
         String whereClause = " WHERE Id in " + "(SELECT Id FROM " + PLAYER_ITEM_JUNCTION_TABLE_NAME +
                 " WHERE " + PLAYER_ID + " = ? AND " + ITEM_ID + " = ? LIMIT 1)";
