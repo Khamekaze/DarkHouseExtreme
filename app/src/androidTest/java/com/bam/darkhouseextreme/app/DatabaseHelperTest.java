@@ -29,18 +29,15 @@ public class DatabaseHelperTest extends ActivityInstrumentationTestCase2<StartSc
         super.setUp();
         context = getInstrumentation().getContext();
         databaseHelper = new DatabaseHelper(context);
-        db = databaseHelper.getWritableDatabase();
-        databaseHelper.onCreate(db);
     }
 
     public void testCreateCharacter() {
         String name = "Mugabe";
-        ContentValues contentValues = new ContentValues();
-        contentValues.put("Name", name);
-        long rowId = db.insert("Player", null, contentValues);
+        Player id = databaseHelper.createCharacter(name);
+        boolean finished = id.getId() != -1;
 
-        assertEquals(rowId !=-1, databaseHelper.createCharacter(name).getId() != -1);
-        db.close();
+        assertTrue(finished);
+
     }
 
 

@@ -33,20 +33,19 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
-        SQLiteDatabase db = this.getWritableDatabase();
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL("CREATE TABLE IF NOT EXISTS" + PLAYER_TABLE_NAME + " (" + PLAYER_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+        db.execSQL("CREATE TABLE IF NOT EXISTS " + PLAYER_TABLE_NAME + " (" + PLAYER_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
                         + PLAYER_NAME + " TEXT, " + PLAYER_MAP_X + " INTEGER, " + PLAYER_MAP_Y + " INTEGER, " + PLAYER_OBJ_IDS + " INTEGER)"
         );
-        db.execSQL("CREATE TABLE IF NOT EXISTS" + ITEM_TABLE_NAME + " (" + ITEM_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+        db.execSQL("CREATE TABLE IF NOT EXISTS " + ITEM_TABLE_NAME + " (" + ITEM_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
                         + ITEM_NAME + " TEXT, " + ITEM_DESCRIPTION + " TEXT)"
         );
 
-        db.execSQL("CREATE TABLE IF NOT EXISTS" + PLAYER_ITEM_JUNCTION_TABLE_NAME + " (" + PLAYER_ITEM_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-                        + PLAYER_ID + " TEXT REFERENCES " + PLAYER_TABLE_NAME + ", " + ITEM_ID + " TEXT REFERENCES" + ITEM_TABLE_NAME + ")"
+        db.execSQL("CREATE TABLE IF NOT EXISTS " + PLAYER_ITEM_JUNCTION_TABLE_NAME + " (" + PLAYER_ITEM_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                        + PLAYER_ID + " TEXT REFERENCES " + PLAYER_TABLE_NAME + ", " + ITEM_ID + " TEXT REFERENCES " + ITEM_TABLE_NAME + ")"
         );
     }
 
@@ -74,7 +73,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public Cursor getOneCharacter(String id) {
         SQLiteDatabase db = this.getReadableDatabase();
         String[] selection = {id};
-        Cursor cursor = db.rawQuery("SELECT * FROM " + PLAYER_TABLE_NAME + "WHERE " + PLAYER_ID + " = ?" , selection);
+        Cursor cursor = db.rawQuery("SELECT * FROM " + PLAYER_TABLE_NAME + " WHERE " + PLAYER_ID + " = ?" , selection);
         db.close();
         return cursor;
     }
@@ -139,8 +138,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public boolean removeObjectFromInventory(String playerId, String objectId) {
         SQLiteDatabase db = this.getWritableDatabase();
 
-        String whereClause = " WHERE Id in" + "(SELECT Id FROM" + PLAYER_ITEM_JUNCTION_TABLE_NAME +
-                "WHERE " + PLAYER_ID + " = ? AND " + ITEM_ID + " = ? LIMIT 1)";
+        String whereClause = " WHERE Id in " + "(SELECT Id FROM " + PLAYER_ITEM_JUNCTION_TABLE_NAME +
+                " WHERE " + PLAYER_ID + " = ? AND " + ITEM_ID + " = ? LIMIT 1)";
         String[] whereArgs = {playerId, objectId};
 
         int i = db.delete(PLAYER_ITEM_JUNCTION_TABLE_NAME, whereClause, whereArgs);
