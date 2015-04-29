@@ -23,7 +23,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String PLAYER_NAME = "Name";
     private static final String PLAYER_MAP_X = "MapXCoordinate";
     private static final String PLAYER_MAP_Y = "MapYCoordinate";
-    private static final String PLAYER_OBJ_IDS = "ObjectIds";
     private static final String PLAYER_SCORE = "Score";
 
     private static final String ITEM_TABLE_NAME = "Item";
@@ -118,15 +117,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return true;
     }
 
-    public boolean addObjectToPlayerInventory(String playerId, String objectId) {
+    public boolean addObjectToPlayerInventory(String playerId, String itemId) {
         db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
-        contentValues.put(PLAYER_OBJ_IDS, objectId);
-        String whereClause = " WHERE " + PLAYER_ID + " = ?";
-        String[] whereArgs = {playerId};
+        contentValues.put(JUNCTION_TABLE_PLAYER_ID, playerId);
+        contentValues.put(JUNCTION_TABLE_ITEM_ID, itemId);
 
-        int i = db.update(PLAYER_TABLE_NAME, contentValues, whereClause, whereArgs);
-        if (i == -1) {
+        long rowId = db.insert(PLAYER_ITEM_JUNCTION_TABLE_NAME, null, contentValues);
+
+        if (rowId == -1) {
             return false;
         } else {
             return true;
@@ -136,17 +135,17 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public Cursor getAllObjectsFromCharacter(String id) {
         db = this.getReadableDatabase();
         String[] selection = {id};
-        Cursor cursor = db.rawQuery("SELECT * FROM " + PLAYER_ITEM_JUNCTION_TABLE_NAME + " WHERE " + PLAYER_ID + " = ?", selection);
+        Cursor cursor = db.rawQuery("SELECT * FROM " + PLAYER_ITEM_JUNCTION_TABLE_NAME + " WHERE " + JUNCTION_TABLE_PLAYER_ID + " = ?", selection);
         db.close();
         return cursor;
     }
 
-    public boolean removeObjectFromInventory(String playerId, String objectId) {
+    public boolean removeObjectFromInventory(String playerId, String itemId) {
         db = this.getWritableDatabase();
 
         String whereClause = " WHERE Id in " + "(SELECT Id FROM " + PLAYER_ITEM_JUNCTION_TABLE_NAME +
-                " WHERE " + PLAYER_ID + " = ? AND " + ITEM_ID + " = ? LIMIT 1)";
-        String[] whereArgs = {playerId, objectId};
+                " WHERE " + JUNCTION_TABLE_PLAYER_ID + " = ? AND " + JUNCTION_TABLE_ITEM_ID + " = ? LIMIT 1)";
+        String[] whereArgs = {playerId, itemId};
 
         int i = db.delete(PLAYER_ITEM_JUNCTION_TABLE_NAME, whereClause, whereArgs);
 
@@ -159,7 +158,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 //        Alternatively:
 //        This is probably a worse way of doing the same thing as above but I'm keeping it 'til we know for sure that it works.
 //        String whereClause = " WHERE " + PLAYER_ID + " = ? AND " + ITEM_ID + " = ? LIMIT 1";
-//        String[] whereArgs = {playerId, objectId};
+//        String[] whereArgs = {playerId, itemId};
 //        db.delete(PLAYER_ITEM_JUNCTION_TABLE_NAME, whereClause, whereArgs);
     }
 }
