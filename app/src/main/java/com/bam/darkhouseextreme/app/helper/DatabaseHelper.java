@@ -99,28 +99,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db = this.getReadableDatabase();
         String[] selection = {id};
         Cursor cursor = db.rawQuery("SELECT * FROM " + PLAYER_TABLE_NAME + " WHERE " + PLAYER_ID + " = ?" , selection);
-        try {
-            if (db!= null) {
-                db.close();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            Log.e("Error: ", "Unable to close in getOneCharacter method.");
-        }
+
         return cursor;
     }
 
     public Cursor getAllCharacters() {
         db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery("SELECT * FROM " + PLAYER_TABLE_NAME, null);
-        try {
-            if (db!= null) {
-                db.close();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            Log.e("Error: ", "Unable to close in getAllCharacters method.");
-        }
+
         return cursor;
     }
 
@@ -191,14 +177,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db = this.getReadableDatabase();
         String[] selection = {id};
         Cursor cursor = db.rawQuery("SELECT * FROM " + PLAYER_ITEM_JUNCTION_TABLE_NAME + " WHERE CAST(" + JUNCTION_TABLE_PLAYER_ID + "as INTEGER) = ?", selection);
-        try {
-            if (db!= null) {
-                db.close();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            Log.e("Error: ", "Unable to close in getAllObjectsFromCharacter method.");
-        }
+
         return cursor;
     }
 
