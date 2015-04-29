@@ -53,7 +53,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("CREATE TABLE IF NOT EXISTS " + PLAYER_ITEM_JUNCTION_TABLE_NAME + " (" + PLAYER_ITEM_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
                         + JUNCTION_TABLE_PLAYER_ID + " INTEGER REFERENCES " + PLAYER_TABLE_NAME + ", " + JUNCTION_TABLE_ITEM_ID + " INTEGER REFERENCES " + ITEM_TABLE_NAME + ")"
         );
-        db.close();
+
+        try {
+            if (db != null) {
+
+            db.close();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.e("Error: ", "Unable to close!");
+        }
     }
 
     @Override
@@ -68,7 +77,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         contentValues.put(PLAYER_NAME, name);
         long rowId = db.insert(PLAYER_TABLE_NAME, null, contentValues);
 
-        db.close();
+        try {
+            if (db!= null) {
+                db.close();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.e("Error: ", "Unable to close in createCharacter method.");
+        }
 
         if (rowId == -1) {
             Log.v(LOG_DATA, "Failed");
@@ -83,14 +99,28 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db = this.getReadableDatabase();
         String[] selection = {id};
         Cursor cursor = db.rawQuery("SELECT * FROM " + PLAYER_TABLE_NAME + " WHERE " + PLAYER_ID + " = ?" , selection);
-        db.close();
+        try {
+            if (db!= null) {
+                db.close();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.e("Error: ", "Unable to close in getOneCharacter method.");
+        }
         return cursor;
     }
 
     public Cursor getAllCharacters() {
         db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery("SELECT * FROM " + PLAYER_TABLE_NAME, null);
-        db.close();
+        try {
+            if (db!= null) {
+                db.close();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.e("Error: ", "Unable to close in getAllCharacters method.");
+        }
         return cursor;
     }
 
@@ -103,6 +133,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         String whereClause = " CAST(" + PLAYER_ID + " as INTEGER) = ?";
         String[] whereArgs = {id};
         db.update(PLAYER_TABLE_NAME, contentValues, whereClause, whereArgs);
+        try {
+            if (db!= null) {
+                db.close();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.e("Error: ", "Unable to close in updateCharacter method.");
+        }
 
         return true;
     }
@@ -114,7 +152,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         String[] whereArgs = {id};
         db.delete(PLAYER_ITEM_JUNCTION_TABLE_NAME, whereClause, whereArgs);
         db.delete(PLAYER_TABLE_NAME, whereClause, whereArgs);
-
+        try {
+            if (db!= null) {
+                db.close();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.e("Error: ", "Unable to close in deleteCharacter method.");
+        }
         return true;
     }
 
@@ -125,6 +170,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         contentValues.put(JUNCTION_TABLE_ITEM_ID, itemId);
 
         long rowId = db.insert(PLAYER_ITEM_JUNCTION_TABLE_NAME, null, contentValues);
+
+        try {
+            if (db!= null) {
+                db.close();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.e("Error: ", "Unable to close in addObjectToPlayerInventory method.");
+        }
 
         if (rowId == -1) {
             return false;
@@ -137,7 +191,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db = this.getReadableDatabase();
         String[] selection = {id};
         Cursor cursor = db.rawQuery("SELECT * FROM " + PLAYER_ITEM_JUNCTION_TABLE_NAME + " WHERE CAST(" + JUNCTION_TABLE_PLAYER_ID + "as INTEGER) = ?", selection);
-        db.close();
+        try {
+            if (db!= null) {
+                db.close();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.e("Error: ", "Unable to close in getAllObjectsFromCharacter method.");
+        }
         return cursor;
     }
 
@@ -149,6 +210,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         String[] whereArgs = {playerId, itemId};
 
         int i = db.delete(PLAYER_ITEM_JUNCTION_TABLE_NAME, whereClause, whereArgs);
+
+        try {
+            if (db!= null) {
+                db.close();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.e("Error: ", "Unable to close in removeObjectFromInventory method.");
+        }
 
           if (i == -1) {
             return false;
