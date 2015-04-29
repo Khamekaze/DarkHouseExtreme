@@ -3,9 +3,8 @@
     android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/main_bg"
     android:weightSum="40"
-    >
+              android:background="#00ffffff">
     <ListView
         android:layout_weight="20"
         android:id="@+id/characterList"
