@@ -21,7 +21,7 @@ public class CharacterListAdapter extends ArrayAdapter<Player> {
 
     private Context context;
     private int layoutResourceId;
-    private ArrayList<Player> data;
+    private ArrayList<Player> data = new ArrayList<>();
 
     public CharacterListAdapter(Context context, int resource, ArrayList<Player> data) {
         super(context, resource, data);
