@@ -53,6 +53,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("CREATE TABLE IF NOT EXISTS " + PLAYER_ITEM_JUNCTION_TABLE_NAME + " (" + PLAYER_ITEM_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
                         + JUNCTION_TABLE_PLAYER_ID + " INTEGER REFERENCES " + PLAYER_TABLE_NAME + ", " + JUNCTION_TABLE_ITEM_ID + " INTEGER REFERENCES " + ITEM_TABLE_NAME + ")"
         );
+        db.close();
     }
 
     @Override
@@ -99,7 +100,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         contentValues.put(PLAYER_MAP_X, mapXCoordinate);
         contentValues.put(PLAYER_MAP_Y, mapYCoordinate);
         contentValues.put(PLAYER_SCORE, score);
-        String whereClause = " WHERE " + PLAYER_ID + " = ?";
+        String whereClause = " CAST(" + PLAYER_ID + " as INTEGER) = ?";
         String[] whereArgs = {id};
         db.update(PLAYER_TABLE_NAME, contentValues, whereClause, whereArgs);
 
@@ -109,7 +110,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public boolean deleteCharacter(String id) {
 
         db = this.getWritableDatabase();
-        String whereClause = " WHERE " + PLAYER_ID + " = ?";
+        String whereClause = " CAST(" + PLAYER_ID + " as INTEGER) = ?";
         String[] whereArgs = {id};
         db.delete(PLAYER_ITEM_JUNCTION_TABLE_NAME, whereClause, whereArgs);
         db.delete(PLAYER_TABLE_NAME, whereClause, whereArgs);
@@ -135,7 +136,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public Cursor getAllObjectsFromCharacter(String id) {
         db = this.getReadableDatabase();
         String[] selection = {id};
-        Cursor cursor = db.rawQuery("SELECT * FROM " + PLAYER_ITEM_JUNCTION_TABLE_NAME + " WHERE " + JUNCTION_TABLE_PLAYER_ID + " = ?", selection);
+        Cursor cursor = db.rawQuery("SELECT * FROM " + PLAYER_ITEM_JUNCTION_TABLE_NAME + " WHERE CAST(" + JUNCTION_TABLE_PLAYER_ID + "as INTEGER) = ?", selection);
         db.close();
         return cursor;
     }
@@ -143,8 +144,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public boolean removeObjectFromInventory(String playerId, String itemId) {
         db = this.getWritableDatabase();
 
-        String whereClause = " WHERE Id in " + "(SELECT Id FROM " + PLAYER_ITEM_JUNCTION_TABLE_NAME +
-                " WHERE " + JUNCTION_TABLE_PLAYER_ID + " = ? AND " + JUNCTION_TABLE_ITEM_ID + " = ? LIMIT 1)";
+        String whereClause = PLAYER_ITEM_ID + " in " + "(SELECT Id FROM " + PLAYER_ITEM_JUNCTION_TABLE_NAME +
+                " WHERE CAST(" + JUNCTION_TABLE_PLAYER_ID + " as INTEGER) = ? AND CAST(" + JUNCTION_TABLE_ITEM_ID + " as INTEGER) = ? LIMIT 1)";
         String[] whereArgs = {playerId, itemId};
 
         int i = db.delete(PLAYER_ITEM_JUNCTION_TABLE_NAME, whereClause, whereArgs);
