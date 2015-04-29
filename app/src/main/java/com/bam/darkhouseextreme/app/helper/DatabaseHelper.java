@@ -30,6 +30,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     private static final String PLAYER_ITEM_JUNCTION_TABLE_NAME = "Player_Item";
     private static final String PLAYER_ITEM_ID = "Id";
+    private static final String JUNCTION_TABLE_PLAYER_ID = PLAYER_ID;
+    private static final String JUNCTION_TABLE_ITEM_ID = ITEM_ID;
 
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -45,7 +47,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         );
 
         db.execSQL("CREATE TABLE IF NOT EXISTS " + PLAYER_ITEM_JUNCTION_TABLE_NAME + " (" + PLAYER_ITEM_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-                        + PLAYER_ID + " TEXT REFERENCES " + PLAYER_TABLE_NAME + ", " + ITEM_ID + " TEXT REFERENCES " + ITEM_TABLE_NAME + ")"
+                        + JUNCTION_TABLE_PLAYER_ID + " INTEGER REFERENCES " + PLAYER_TABLE_NAME + ", " + JUNCTION_TABLE_ITEM_ID + " INTEGER REFERENCES " + ITEM_TABLE_NAME + ")"
         );
     }
 
@@ -64,7 +66,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.close();
 
         if (rowId == -1) {
-            return new Player();
+            return null;
         } else {
             return new Player(rowId, name);
         }

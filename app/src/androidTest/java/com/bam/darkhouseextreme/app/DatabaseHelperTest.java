@@ -40,8 +40,6 @@ public class DatabaseHelperTest extends ActivityInstrumentationTestCase2<StartSc
 
     }
 
-
-
     @Override
     protected void tearDown() throws Exception {
         db.close();
