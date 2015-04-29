@@ -45,7 +45,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL("CREATE TABLE IF NOT EXISTS " + PLAYER_TABLE_NAME + " (" + PLAYER_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-                        + PLAYER_NAME + " TEXT, " + PLAYER_MAP_X + " INTEGER, " + PLAYER_MAP_Y + " INTEGER, " + PLAYER_OBJ_IDS + " INTEGER)"
+                        + PLAYER_NAME + " TEXT, " + PLAYER_MAP_X + " INTEGER, " + PLAYER_MAP_Y + " INTEGER)"
         );
         db.execSQL("CREATE TABLE IF NOT EXISTS " + ITEM_TABLE_NAME + " (" + ITEM_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
                         + ITEM_NAME + " TEXT, " + ITEM_DESCRIPTION + " TEXT)"
@@ -94,7 +94,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return cursor;
     }
 
-    public boolean updateCharacter(String id, String mapXCoordinate, String mapYCoordinate, int score, String[] objectIds) {
+    public boolean updateCharacter(String id, String mapXCoordinate, String mapYCoordinate, int score) {
         db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(PLAYER_MAP_X, mapXCoordinate);
@@ -104,10 +104,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         String[] whereArgs = {id};
         db.update(PLAYER_TABLE_NAME, contentValues, whereClause, whereArgs);
 
-        for (String s : objectIds) {
-            contentValues.put(PLAYER_OBJ_IDS, s);
-            db.update(PLAYER_TABLE_NAME, contentValues, whereClause, whereArgs);
-        }
         return true;
     }
 
@@ -116,6 +112,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db = this.getWritableDatabase();
         String whereClause = " WHERE " + PLAYER_ID + " = ?";
         String[] whereArgs = {id};
+        db.delete(PLAYER_ITEM_JUNCTION_TABLE_NAME, whereClause, whereArgs);
         db.delete(PLAYER_TABLE_NAME, whereClause, whereArgs);
 
         return true;
