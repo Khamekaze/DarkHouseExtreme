@@ -6,6 +6,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.bam.darkhouseextreme.app.model.Player;
+
 /**
  * Created by Anders on 2015-04-28.
  */
@@ -54,24 +56,25 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public boolean createCharacter(String name) {
+    public Player createCharacter(String name) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(PLAYER_NAME, name);
-        long result = db.insert(PLAYER_TABLE_NAME, null, contentValues);
+        long rowId = db.insert(PLAYER_TABLE_NAME, null, contentValues);
 
         db.close();
 
-        if (result == -1) {
-            return false;
+        if (rowId == -1) {
+            return new Player();
         } else {
-            return true;
+            return new Player(rowId, name);
         }
     }
 
     public Cursor getOneCharacter(String id) {
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT * FROM " + PLAYER_TABLE_NAME + "WHERE " + PLAYER_ID + " = " + id, null);
+        String[] selection = {id};
+        Cursor cursor = db.rawQuery("SELECT * FROM " + PLAYER_TABLE_NAME + "WHERE " + PLAYER_ID + " = ?" , selection);
         db.close();
         return cursor;
     }
@@ -123,6 +126,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         } else {
             return true;
         }
+    }
+
+    public Cursor getAllObjectsFromCharacter(String id) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String[] selection = {id};
+        Cursor cursor = db.rawQuery("SELECT * FROM " + PLAYER_ITEM_JUNCTION_TABLE_NAME + " WHERE " + PLAYER_ID + " = ?", selection);
+        db.close();
+        return cursor;
     }
 
     public boolean removeObjectFromInventory(String playerId, String objectId) {

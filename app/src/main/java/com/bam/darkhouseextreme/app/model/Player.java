@@ -7,18 +7,27 @@ import java.util.List;
  * Created by Anders on 2015-04-28.
  */
 public class Player {
-    private int id;
+    private long id;
     private String name;
-    private int mapXCoordinate;
-    private int mapYCoordinate;
+    private Integer mapXCoordinate;
+    private Integer mapYCoordinate;
     private List<Integer> objectIds = new ArrayList<>();
     private int score;
 
-    public int getId() {
+    public Player() {
+
+    }
+
+    public Player(long id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
