@@ -62,7 +62,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("DROP IF EXISTS TABLE " + PLAYER_TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS " + PLAYER_TABLE_NAME);
         onCreate(db);
     }
 
@@ -139,7 +139,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public Cursor getAllItemsFromCharacter(long id) {
         db = this.getReadableDatabase();
         String[] selection = {String.valueOf(id)};
-        Cursor cursor = db.rawQuery("SELECT * FROM " + PLAYER_ITEM_JUNCTION_TABLE_NAME + " WHERE " + JUNCTION_TABLE_PLAYER_ID + " = ?", selection);
+        Cursor cursor = db.rawQuery("SELECT * FROM " + ITEM_TABLE_NAME + " AS I JOIN " + PLAYER_ITEM_JUNCTION_TABLE_NAME + " AS PI ON I." + ITEM_ID + " = PI." + JUNCTION_TABLE_ITEM_ID + " WHERE PI." + JUNCTION_TABLE_PLAYER_ID + " = ?", selection);
         return cursor;
     }
 

@@ -26,6 +26,7 @@ import com.bam.darkhouseextreme.app.model.Player;
 import com.bam.darkhouseextreme.app.utilities.Utilities;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Chobii on 28/04/15.
@@ -37,7 +38,7 @@ public class SelectCharacterFragment extends Fragment {
     private Button deleteBtn;
     private Button selectCharacterBtn;
     private Cursor cursor;
-    private ArrayList<Player> players = new ArrayList<>();
+    private List<Player> players = new ArrayList<>();
     private CharacterListAdapter characterListAdapter;
     private ListView characterListView;
     private TextView characterNameView;

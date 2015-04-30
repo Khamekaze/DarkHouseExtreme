@@ -22,10 +22,10 @@ public class CharacterListAdapter extends ArrayAdapter<Player> {
 
     private Context context;
     private int layoutResourceId;
-    private ArrayList<Player> data = new ArrayList<>();
+    private List<Player> data = new ArrayList<>();
     private View lastSelectedView;
 
-    public CharacterListAdapter(Context context, int resource, ArrayList<Player> data) {
+    public CharacterListAdapter(Context context, int resource, List<Player> data) {
         super(context, resource, data);
         this.context = context;
         this.layoutResourceId = resource;
