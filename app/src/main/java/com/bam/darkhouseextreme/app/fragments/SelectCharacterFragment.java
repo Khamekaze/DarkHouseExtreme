@@ -7,17 +7,10 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.Button;
-import android.widget.LinearLayout;
-import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toast;
-
+import android.widget.*;
 import com.bam.darkhouseextreme.app.R;
 import com.bam.darkhouseextreme.app.activities.GameActivity;
 import com.bam.darkhouseextreme.app.adapter.CharacterListAdapter;
@@ -111,6 +104,10 @@ public class SelectCharacterFragment extends Fragment {
             public void onClick(View v) {
                 if (player != null) {
                     helper.deleteCharacter(String.valueOf(player.getId()));
+                    clearSelection();
+                    players.remove(player);
+                    player = null;
+                    characterListAdapter.notifyDataSetChanged();
                 } else {
                     Toast.makeText(context, "No character selected", Toast.LENGTH_SHORT).show();
                 }

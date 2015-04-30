@@ -5,6 +5,8 @@ import android.test.RenamingDelegatingContext;
 import com.bam.darkhouseextreme.app.helper.DatabaseHelper;
 import com.bam.darkhouseextreme.app.model.Player;
 
+import java.util.List;
+
 /**
  * Created by Chobii on 30/04/15.
  */
@@ -36,6 +38,8 @@ public class TestOfDatabase extends AndroidTestCase {
         boolean updated = helper.updateCharacter(String.valueOf(player.getId()), "0", "1", 100);
         assertTrue(updated);
         // Test Read.
+        List<Player> players = helper.getAllCharacters();
+        assertTrue(players.size() != 0);
         // Test Delete.
         boolean deleted = helper.deleteCharacter(String.valueOf(player.getId()));
         assertTrue(deleted);

@@ -136,14 +136,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return rowId == -1;
     }
 
-    public Cursor getAllItemsFromCharacter(long id) {
+    private Cursor getAllItemsFromCharacter(long id) {
         db = this.getReadableDatabase();
         String[] selection = {String.valueOf(id)};
         Cursor cursor = db.rawQuery("SELECT * FROM " + ITEM_TABLE_NAME + " AS I JOIN " + PLAYER_ITEM_JUNCTION_TABLE_NAME + " AS PI ON I." + ITEM_ID + " = PI." + JUNCTION_TABLE_ITEM_ID + " WHERE PI." + JUNCTION_TABLE_PLAYER_ID + " = ?", selection);
         return cursor;
     }
 
-    public List<Player> getListOfPlayers(Cursor cursor) {
+    private List<Player> getListOfPlayers(Cursor cursor) {
         List<Player> players = new ArrayList<>();
 
         while (cursor.moveToNext()) {
@@ -183,11 +183,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         db.close();
 
-        if (i == -1) {
-            return false;
-        } else {
-            return true;
-        }
+        return i == -1;
 
 //        Alternatively:
 //        This is probably a worse way of doing the same thing as above but I'm keeping it 'til we know for sure that it works.
