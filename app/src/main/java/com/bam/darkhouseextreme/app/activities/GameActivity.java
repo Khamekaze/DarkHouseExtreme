@@ -14,13 +14,20 @@ public class GameActivity extends FragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.gameactivity);
-        getSupportFragmentManager().beginTransaction()
-                .add(R.id.gamelayout, new FirstroomFragment(), "firstroom").commit();
+        if (savedInstanceState == null) {
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.gamelayout, new FirstroomFragment(), "firstroom").commit();
+        }
 
     }
 
     @Override
     public void overridePendingTransition(int enterAnim, int exitAnim) {
         super.overridePendingTransition(enterAnim, exitAnim);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
     }
 }

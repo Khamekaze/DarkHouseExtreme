@@ -21,14 +21,19 @@ public class StartScreenActivity extends FragmentActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.startactivity);
-        getSupportFragmentManager().beginTransaction()
-                .add(R.id.startscreenlayout, new StartScreenFragment(), "startScreen")
-                .commit();
+        if (savedInstanceState == null) {
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.startscreenlayout, new StartScreenFragment(), "startScreen")
+                    .commit();
+        }
     }
 
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+    }
 
-
-//
+    //
 //    @Override
 //    public boolean onCreateOptionsMenu(Menu menu) {
 //        // Inflate the menu; this adds items to the action bar if it is present.
