@@ -14,8 +14,8 @@ import android.widget.*;
 import com.bam.darkhouseextreme.app.R;
 import com.bam.darkhouseextreme.app.activities.GameActivity;
 import com.bam.darkhouseextreme.app.adapter.CharacterListAdapter;
-import com.bam.darkhouseextreme.app.helper.DatabaseHelper;
 import com.bam.darkhouseextreme.app.model.Player;
+import com.bam.darkhouseextreme.app.utilities.SaveUtility;
 import com.bam.darkhouseextreme.app.utilities.Utilities;
 
 import java.util.ArrayList;
@@ -26,7 +26,7 @@ import java.util.List;
  */
 public class SelectCharacterFragment extends Fragment {
 
-    private DatabaseHelper helper;
+//    private DatabaseHelper helper;
     private Context context;
     private Button deleteBtn;
     private Button selectCharacterBtn;
@@ -48,10 +48,11 @@ public class SelectCharacterFragment extends Fragment {
         final View root = inflater.inflate(R.layout.selectcharacterfragment, container, false);
         final Typeface fonts = Typeface.createFromAsset(context.getAssets(), "fonts/MISFITS_.TTF");
 
-        helper = new DatabaseHelper(context);
+//        helper = new DatabaseHelper(context);
 
         //Change to players instead of cursor
-        players = helper.getAllCharacters();
+//        players = helper.getAllCharacters();
+        players = SaveUtility.getAllCharacters();
 
         characterListView = (ListView) root.findViewById(R.id.characterList);
         characterListView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
@@ -81,14 +82,9 @@ public class SelectCharacterFragment extends Fragment {
                 view.setBackgroundResource(R.drawable.selected_list_row_bg);
 
                 characterNameView = (TextView) view.findViewById(R.id.characterNameText);
-                long playerId = (long) characterNameView.getTag();
-                for (Player p : players) {
-                    if (p.getId() == playerId) {
-                        player = p;
-                    }
-                }
+//                long playerId = (long) characterNameView.getTag();
+                player = players.get(position);
 
-//                Log.d(LOG_DATA, player.getName());
             }
 
         });
@@ -103,7 +99,7 @@ public class SelectCharacterFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 if (player != null) {
-                    helper.deleteCharacter(String.valueOf(player.getId()));
+                    SaveUtility.deleteCharacter(player);
                     clearSelection();
                     players.remove(player);
                     player = null;
@@ -120,8 +116,9 @@ public class SelectCharacterFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 if (player != null) {
+                    SaveUtility.loadCharacter(player);
                     Intent intent = new Intent(context, GameActivity.class);
-                    intent.putExtra("player", player);
+//                    intent.putExtra("player", player);
                     startActivity(intent);
                 } else {
                     Toast.makeText(context, "No character selected", Toast.LENGTH_SHORT).show();

@@ -5,7 +5,7 @@ import android.support.v4.app.FragmentActivity;
 import android.view.Window;
 import android.view.WindowManager;
 import com.bam.darkhouseextreme.app.R;
-import com.bam.darkhouseextreme.app.fragments.FirstroomFragment;
+import com.bam.darkhouseextreme.app.fragments.RoomFragment;
 
 /**
  * Created by Chobii on 28/04/15.
@@ -23,7 +23,7 @@ public class GameActivity extends FragmentActivity {
         setContentView(R.layout.gameactivity);
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.gamelayout, new FirstroomFragment(), "firstroom").commit();
+                    .add(R.id.gamelayout, new RoomFragment(), "room").commit();
         }
 
     }

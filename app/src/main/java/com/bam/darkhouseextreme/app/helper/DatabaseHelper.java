@@ -107,9 +107,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         contentValues.put(PLAYER_SCORE, score);
         String whereClause = PLAYER_ID + " = ?";
         String[] whereArgs = {id};
-        db.update(PLAYER_TABLE_NAME, contentValues, whereClause, whereArgs);
 
-        return true;
+        return db.update(PLAYER_TABLE_NAME, contentValues, whereClause, whereArgs) > 0;
     }
 
     public boolean deleteCharacter(String id) {

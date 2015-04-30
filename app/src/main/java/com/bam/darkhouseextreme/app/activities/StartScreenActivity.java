@@ -1,19 +1,20 @@
 package com.bam.darkhouseextreme.app.activities;
 
-import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.support.v4.app.FragmentActivity;
 import android.view.Window;
 import android.view.WindowManager;
 import com.bam.darkhouseextreme.app.R;
 import com.bam.darkhouseextreme.app.fragments.StartScreenFragment;
+import com.bam.darkhouseextreme.app.utilities.SaveUtility;
 
 
 public class StartScreenActivity extends FragmentActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        SaveUtility.setHelper(getApplicationContext());
 
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,

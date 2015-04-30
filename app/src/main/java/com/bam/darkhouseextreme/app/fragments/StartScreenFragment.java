@@ -45,7 +45,7 @@ public class StartScreenFragment extends Fragment {
         newGame = (Button) root.findViewById(R.id.newGame);
         loadGame = (Button) root.findViewById(R.id.loadGameButton);
         quit = (Button) root.findViewById(R.id.quit);
-        newGame.setTypeface(font);
+
         newGame();
         loadGame();
 

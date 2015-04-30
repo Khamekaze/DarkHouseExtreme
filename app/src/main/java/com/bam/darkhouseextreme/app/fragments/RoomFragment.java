@@ -14,35 +14,41 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 import com.bam.darkhouseextreme.app.R;
+import com.bam.darkhouseextreme.app.utilities.SaveUtility;
 import com.bam.darkhouseextreme.app.utilities.Utilities;
 
 /**
  * Created by Chobii on 29/04/15.
  */
-public class FirstroomFragment extends Fragment {
+public class RoomFragment extends Fragment {
 
-    private final String LOG_DATA = FirstroomFragment.class.getSimpleName();
+    private final String LOG_DATA = RoomFragment.class.getSimpleName();
 
     private View root;
     private Button buttonUp, buttonDown, buttonLeft, buttonRight;
     private Context context;
     private ImageView ltest;
-    private int x_cord, y_cord;
+    private int x_cord, y_cord, score;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         context = getActivity().getApplicationContext();
-        root = inflater.inflate(R.layout.firstroom, container, false);
+        root = inflater.inflate(R.layout.room, container, false);
         ltest = (ImageView)root.findViewById(R.id.ltest);
 
         buttonUp = (Button)root.findViewById(R.id.buttonUp);
         buttonDown = (Button)root.findViewById(R.id.buttonDown);
         buttonLeft = (Button)root.findViewById(R.id.buttonLeft);
         buttonRight = (Button)root.findViewById(R.id.buttonRight);
-        x_cord = 0;
-        y_cord = 1;
+
+        int[] stats = SaveUtility.loadStats();
+        x_cord = stats[0];
+        y_cord = stats[1];
+        score  = stats[2];
+
+        continueIfApplicable(x_cord, y_cord);
 
         setButtonUp();
         setButtonDown();
@@ -147,10 +153,19 @@ public class FirstroomFragment extends Fragment {
         final int roomId;
         if ((roomId = Utilities.isViableRoom(room, context)) != 0) {
             changeRoom(roomId);
+            Log.d(LOG_DATA, String.valueOf(x) + ", " + String.valueOf(y) + ", " + String.valueOf(score));
+            SaveUtility.saveProgress(x, y, score +=10);
             return true;
         }
         else return false;
 
+    }
+
+    private void continueIfApplicable(int x, int y) {
+        String room = String.valueOf(x) + String.valueOf(y);
+        final int roomId;
+        roomId = Utilities.isViableRoom(room, context);
+        ltest.setImageResource(roomId);
     }
 
 //    private void isRoomsNext(int x, int y) {
