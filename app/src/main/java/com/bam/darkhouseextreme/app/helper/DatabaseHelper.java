@@ -93,11 +93,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return player;
     }
 
-    public Cursor getAllCharacters() {
+    public List<Player> getAllCharacters() {
         db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery("SELECT * FROM " + PLAYER_TABLE_NAME, null);
-        db.close();
-        return cursor;
+        return getListOfPlayers(cursor);
     }
 
     public boolean updateCharacter(String id, String mapXCoordinate, String mapYCoordinate, int score) {
@@ -120,6 +119,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         String[] whereArgs = {id};
         if (db.delete(PLAYER_TABLE_NAME, whereClause, whereArgs) > 0) {
             db.delete(PLAYER_ITEM_JUNCTION_TABLE_NAME, whereClause, whereArgs);
+            db.close();
             return true;
         }
         else return false;
@@ -130,7 +130,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         ContentValues contentValues = new ContentValues();
         contentValues.put(JUNCTION_TABLE_PLAYER_ID, playerId);
         contentValues.put(JUNCTION_TABLE_ITEM_ID, itemId);
-
+        db.close();
         long rowId = db.insert(PLAYER_ITEM_JUNCTION_TABLE_NAME, null, contentValues);
 
         return rowId == -1;
@@ -140,7 +140,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db = this.getReadableDatabase();
         String[] selection = {String.valueOf(id)};
         Cursor cursor = db.rawQuery("SELECT * FROM " + PLAYER_ITEM_JUNCTION_TABLE_NAME + " WHERE " + JUNCTION_TABLE_PLAYER_ID + " = ?", selection);
-        db.close();
         return cursor;
     }
 
@@ -181,6 +180,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         String[] whereArgs = {playerId, itemId};
 
         int i = db.delete(PLAYER_ITEM_JUNCTION_TABLE_NAME, whereClause, whereArgs);
+
+        db.close();
 
         if (i == -1) {
             return false;
