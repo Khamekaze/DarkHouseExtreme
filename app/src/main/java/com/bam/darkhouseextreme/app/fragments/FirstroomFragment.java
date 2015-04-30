@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Toast;
 import com.bam.darkhouseextreme.app.R;
 import com.bam.darkhouseextreme.app.utilities.Utilities;
 
@@ -18,6 +20,8 @@ import com.bam.darkhouseextreme.app.utilities.Utilities;
  * Created by Chobii on 29/04/15.
  */
 public class FirstroomFragment extends Fragment {
+
+    private final String LOG_DATA = FirstroomFragment.class.getSimpleName();
 
     private View root;
     private Button buttonUp, buttonDown, buttonLeft, buttonRight;
@@ -45,8 +49,6 @@ public class FirstroomFragment extends Fragment {
         setButtonLeft();
         setButtonRight();
 
-        isRoomsNext(x_cord, y_cord);
-
         return root;
     }
 
@@ -56,9 +58,10 @@ public class FirstroomFragment extends Fragment {
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        y_cord += 1;
-                        changeRoom(x_cord, y_cord);
-                        isRoomsNext(x_cord, y_cord);
+                        if (!isRoom(x_cord, y_cord+=1)) {
+                            y_cord-=1;
+                            informOfError();
+                        }
                     }
                 }
         );
@@ -69,9 +72,10 @@ public class FirstroomFragment extends Fragment {
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        y_cord -= 1;
-                        changeRoom(x_cord, y_cord);
-                        isRoomsNext(x_cord, y_cord);
+                        if (!isRoom(x_cord, y_cord-=1)) {
+                            y_cord+=1;
+                            informOfError();
+                        }
                     }
                 }
         );
@@ -82,9 +86,10 @@ public class FirstroomFragment extends Fragment {
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        x_cord -= 1;
-                        changeRoom(x_cord, y_cord);
-                        isRoomsNext(x_cord, y_cord);
+                        if (!isRoom(x_cord-=1, y_cord)) {
+                            x_cord+=1;
+                            informOfError();
+                        }
                     }
                 }
         );
@@ -95,73 +100,89 @@ public class FirstroomFragment extends Fragment {
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        x_cord += 1;
-                        changeRoom(x_cord, y_cord);
-                        isRoomsNext(x_cord, y_cord);
+                        if (!isRoom(x_cord+=1, y_cord)) {
+                            x_cord-=1;
+                            informOfError();
+                        }
                     }
                 }
         );
     }
 
-    private void changeRoom(int x, int y) {
+    private void changeRoom(final int roomId) {
+
+        Log.d(LOG_DATA, String.valueOf(x_cord));
+        Log.d(LOG_DATA, String.valueOf(y_cord));
+
+        Animation fadeout = AnimationUtils.loadAnimation(context, R.anim.fade_out);
+        ltest.startAnimation(fadeout);
+
+        fadeout.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                ltest.setImageResource(roomId);
+                Animation fadein = AnimationUtils.loadAnimation(context, R.anim.fade_in);
+                ltest.startAnimation(fadein);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+    }
+
+    private void informOfError() {
+        Toast.makeText(context, "Can't go this way", Toast.LENGTH_LONG)
+                .show();
+    }
+
+    private boolean isRoom(int x, int y) {
         String room = String.valueOf(x) + String.valueOf(y);
         final int roomId;
         if ((roomId = Utilities.isViableRoom(room, context)) != 0) {
-
-            Animation fadeout = AnimationUtils.loadAnimation(context, R.anim.fade_out);
-            ltest.startAnimation(fadeout);
-
-            fadeout.setAnimationListener(new Animation.AnimationListener() {
-                @Override
-                public void onAnimationStart(Animation animation) {
-
-                }
-
-                @Override
-                public void onAnimationEnd(Animation animation) {
-                    ltest.setImageResource(roomId);
-                    Animation fadein = AnimationUtils.loadAnimation(context, R.anim.fade_in);
-                    ltest.startAnimation(fadein);
-                }
-
-                @Override
-                public void onAnimationRepeat(Animation animation) {
-
-                }
-            });
+            changeRoom(roomId);
+            return true;
         }
+        else return false;
+
     }
 
-    private void isRoomsNext(int x, int y) {
-        String left = String.valueOf(x-1) + String.valueOf(y);
-        String right = String.valueOf(x+1) + String.valueOf(y);
-        String up = String.valueOf(x) + String.valueOf(y+1);
-        String down = String.valueOf(x) + String.valueOf(y-1);
-
-        int roomId;
-
-        if ((roomId = Utilities.isViableRoom(left, context)) == 0) {
-            buttonLeft.setEnabled(false);
-        } else {
-            buttonLeft.setEnabled(true);
-        }
-
-        if ((roomId = Utilities.isViableRoom(right, context)) == 0) {
-            buttonRight.setEnabled(false);
-        } else {
-            buttonRight.setEnabled(true);
-        }
-
-        if ((roomId = Utilities.isViableRoom(up, context)) == 0) {
-            buttonUp.setEnabled(false);
-        } else {
-            buttonUp.setEnabled(true);
-        }
-
-        if ((roomId = Utilities.isViableRoom(down, context)) == 0) {
-            buttonDown.setEnabled(false);
-        } else {
-            buttonDown.setEnabled(true);
-        }
-    }
+//    private void isRoomsNext(int x, int y) {
+//        String left = String.valueOf(x-1) + String.valueOf(y);
+//        String right = String.valueOf(x+1) + String.valueOf(y);
+//        String up = String.valueOf(x) + String.valueOf(y+1);
+//        String down = String.valueOf(x) + String.valueOf(y-1);
+//
+//        int roomId;
+//
+//        if ((roomId = Utilities.isViableRoom(left, context)) == 0) {
+//            buttonLeft.setEnabled(false);
+//        } else {
+//            buttonLeft.setEnabled(true);
+//        }
+//
+//        if ((roomId = Utilities.isViableRoom(right, context)) == 0) {
+//            buttonRight.setEnabled(false);
+//        } else {
+//            buttonRight.setEnabled(true);
+//        }
+//
+//        if ((roomId = Utilities.isViableRoom(up, context)) == 0) {
+//            buttonUp.setEnabled(false);
+//        } else {
+//            buttonUp.setEnabled(true);
+//        }
+//
+//        if ((roomId = Utilities.isViableRoom(down, context)) == 0) {
+//            buttonDown.setEnabled(false);
+//        } else {
+//            buttonDown.setEnabled(true);
+//        }
+//    }
 }
