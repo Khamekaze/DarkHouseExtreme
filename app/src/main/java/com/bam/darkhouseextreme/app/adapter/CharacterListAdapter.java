@@ -8,6 +8,7 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.bam.darkhouseextreme.app.R;
+import com.bam.darkhouseextreme.app.fragments.SelectCharacterFragment;
 import com.bam.darkhouseextreme.app.model.Player;
 
 import java.util.ArrayList;
@@ -22,6 +23,7 @@ public class CharacterListAdapter extends ArrayAdapter<Player> {
     private Context context;
     private int layoutResourceId;
     private ArrayList<Player> data = new ArrayList<>();
+    private View lastSelectedView;
 
     public CharacterListAdapter(Context context, int resource, ArrayList<Player> data) {
         super(context, resource, data);
@@ -37,6 +39,7 @@ public class CharacterListAdapter extends ArrayAdapter<Player> {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+        lastSelectedView = SelectCharacterFragment.lastSelectedView;
         View row = convertView;
 
         PlayerHolder playerHolder = null;
@@ -58,6 +61,9 @@ public class CharacterListAdapter extends ArrayAdapter<Player> {
         playerHolder.playerName.setTag(playerId);
         playerHolder.progress.setText(String.valueOf(player.getScore()));
 
+//        if (row != lastSelectedView) {
+//            row.setBackgroundResource(R.drawable.list_row_bg);
+//        }
 
         return row;
     }
