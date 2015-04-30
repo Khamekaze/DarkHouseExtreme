@@ -42,7 +42,7 @@
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:text="@string/load_game_button"
-            android:id="@+id/selectCharacter"
+            android:id="@+id/loadGameButton"
             android:layout_gravity="center"
             android:layout_marginTop="20dp"
             android:background="@drawable/button_bg2"

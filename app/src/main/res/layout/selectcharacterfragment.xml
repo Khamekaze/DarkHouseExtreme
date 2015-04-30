@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:weightSum="40"
-              android:background="#00ffffff">
+    android:background="#00ffffff">
     <ListView
         android:layout_weight="20"
         android:id="@+id/characterList"
@@ -27,7 +27,7 @@
             android:layout_weight="5"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
-            android:id="@+id/deleteCharacter"
+            android:id="@+id/deleteCharacterButton"
             android:background="@drawable/button_bg2"
             android:text="@string/delete_character"
             android:layout_marginBottom="20dp"
@@ -35,7 +35,7 @@
 
         <Button
             android:layout_weight="5"
-            android:id="@+id/selectCharacter"
+            android:id="@+id/loadGameButton"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:background="@drawable/button_bg1"
