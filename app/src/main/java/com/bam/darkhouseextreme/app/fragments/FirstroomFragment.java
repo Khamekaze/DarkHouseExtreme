@@ -37,11 +37,15 @@ public class FirstroomFragment extends Fragment {
         buttonDown = (Button)root.findViewById(R.id.buttonDown);
         buttonLeft = (Button)root.findViewById(R.id.buttonLeft);
         buttonRight = (Button)root.findViewById(R.id.buttonRight);
+        x_cord = 0;
+        y_cord = 1;
 
         setButtonUp();
         setButtonDown();
         setButtonLeft();
         setButtonRight();
+
+        isRoomsNext(x_cord, y_cord);
 
         return root;
     }
@@ -52,7 +56,7 @@ public class FirstroomFragment extends Fragment {
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        x_cord += 1;
+                        y_cord += 1;
                         changeRoom(x_cord, y_cord);
                         isRoomsNext(x_cord, y_cord);
                     }
@@ -65,7 +69,7 @@ public class FirstroomFragment extends Fragment {
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        x_cord -= 1;
+                        y_cord -= 1;
                         changeRoom(x_cord, y_cord);
                         isRoomsNext(x_cord, y_cord);
                     }
@@ -78,7 +82,7 @@ public class FirstroomFragment extends Fragment {
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        y_cord -= 1;
+                        x_cord -= 1;
                         changeRoom(x_cord, y_cord);
                         isRoomsNext(x_cord, y_cord);
                     }
@@ -91,7 +95,7 @@ public class FirstroomFragment extends Fragment {
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        y_cord += 1;
+                        x_cord += 1;
                         changeRoom(x_cord, y_cord);
                         isRoomsNext(x_cord, y_cord);
                     }
