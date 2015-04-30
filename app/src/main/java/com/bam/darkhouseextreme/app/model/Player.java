@@ -12,7 +12,7 @@ public class Player implements Serializable {
     private String name;
     private int mapXCoordinate;
     private int mapYCoordinate;
-    private List<Integer> objectIds = new ArrayList<>();
+    private List<Item> playerItems = new ArrayList<>();
     private int score;
 
     public Player() {
@@ -56,12 +56,12 @@ public class Player implements Serializable {
         this.mapYCoordinate = mapYCoordinate;
     }
 
-    public List<Integer> getObjectIds() {
-        return objectIds;
+    public List<Item> getPlayerItems() {
+        return playerItems;
     }
 
-    public void setObjectIds(List<Integer> objectIds) {
-        this.objectIds = objectIds;
+    public void setPlayerItems(List<Item> playerItems) {
+        this.playerItems = playerItems;
     }
 
     public int getScore() {
