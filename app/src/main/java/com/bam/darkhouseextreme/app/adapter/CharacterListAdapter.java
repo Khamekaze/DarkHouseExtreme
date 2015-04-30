@@ -39,7 +39,7 @@ public class CharacterListAdapter extends ArrayAdapter<Player> {
     public View getView(int position, View convertView, ViewGroup parent) {
         View row = convertView;
 
-        PlayerHolder playerHolder;
+        PlayerHolder playerHolder = null;
         if (row == null) {
             LayoutInflater layoutInflater = LayoutInflater.from(context);
             row = layoutInflater.inflate(layoutResourceId, parent, false);
@@ -56,7 +56,7 @@ public class CharacterListAdapter extends ArrayAdapter<Player> {
         long playerId = player.getId();
         playerHolder.playerName.setText(player.getName());
         playerHolder.playerName.setTag(playerId);
-        playerHolder.progress.setText(player.getScore());
+        playerHolder.progress.setText(String.valueOf(player.getScore()));
 
 
         return row;

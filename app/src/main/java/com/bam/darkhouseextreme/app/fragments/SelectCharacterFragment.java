@@ -15,6 +15,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bam.darkhouseextreme.app.R;
 import com.bam.darkhouseextreme.app.activities.GameActivity;
@@ -35,7 +36,7 @@ public class SelectCharacterFragment extends Fragment {
     private Button deleteBtn;
     private Button selectCharacterBtn;
     private Cursor cursor;
-    private ArrayList<Player> players  = new ArrayList<>();
+    private ArrayList<Player> players = new ArrayList<>();
     private CharacterListAdapter characterListAdapter;
     private ListView characterListView;
     private TextView characterNameView;
@@ -61,7 +62,6 @@ public class SelectCharacterFragment extends Fragment {
             player.setMapXCoordinate(cursor.getInt(2));
             player.setMapYCoordinate(cursor.getInt(3));
             players.add(cursor.getPosition(), player);
-//            players[cursor.getPosition()] = player;
         }
 
         characterListView = (ListView) root.findViewById(R.id.characterList);
@@ -76,15 +76,15 @@ public class SelectCharacterFragment extends Fragment {
 
         Utilities.setFontForView(root, fonts);
         selectCharacter();
+        deleteCharacter();
 
-
-        return super.onCreateView(inflater, container, savedInstanceState);
+        return root;
     }
 
     public void selectCharacter() {
-        characterListView.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        characterListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 characterNameView = (TextView) view.findViewById(R.id.characterNameText);
                 long playerId = (long) characterNameView.getTag();
                 for (Player p : players) {
@@ -95,22 +95,56 @@ public class SelectCharacterFragment extends Fragment {
                 Log.d(LOG_DATA, player.getName());
                 chooseSelectedCharacter();
             }
+        });
+    }
 
+    public void deleteCharacter() {
+        deleteBtn.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-                selectCharacterBtn.setClickable(false);
-
+            public void onClick(View v) {
+                if (player != null) {
+                    helper.deleteCharacter(player.getName());
+                } else {
+                    Toast.makeText(context, "No character selected", Toast.LENGTH_LONG).show();
+                }
             }
         });
     }
+
+//    public void selectCharacter() {
+//        characterListView.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+//            @Override
+//            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+//                characterNameView = (TextView) view.findViewById(R.id.characterNameText);
+//                long playerId = (long) characterNameView.getTag();
+//                for (Player p : players) {
+//                    if (p.getId() == playerId) {
+//                        player = p;
+//                    }
+//                }
+//                Log.d(LOG_DATA, player.getName());
+//                chooseSelectedCharacter();
+//            }
+//
+//            @Override
+//            public void onNothingSelected(AdapterView<?> parent) {
+//                selectCharacterBtn.setClickable(false);
+//
+//            }
+//        });
+//    }
 
     public void chooseSelectedCharacter() {
         selectCharacterBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(context, GameActivity.class);
-                intent.putExtra("player", player);
-                startActivity(intent);
+                if (player != null) {
+                    Intent intent = new Intent(context, GameActivity.class);
+                    intent.putExtra("player", player);
+                    startActivity(intent);
+                } else {
+                    Toast.makeText(context, "No character selected", Toast.LENGTH_LONG).show();
+                }
             }
         });
     }
