@@ -7,7 +7,12 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import android.util.Log;
+
+import com.bam.darkhouseextreme.app.model.Item;
 import com.bam.darkhouseextreme.app.model.Player;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Anders on 2015-04-28.
@@ -78,12 +83,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
-    public Cursor getOneCharacter(String id) {
+    public Player getOneCharacter(String id) {
         db = this.getReadableDatabase();
         String[] selection = {id};
-        Cursor cursor = db.rawQuery("SELECT * FROM " + PLAYER_TABLE_NAME + " WHERE " + PLAYER_ID + " = ?" , selection);
+        Cursor cursor = db.rawQuery("SELECT * FROM " + PLAYER_TABLE_NAME + " WHERE " + PLAYER_ID + " = ?", selection);
         db.close();
-        return cursor;
+
+        Player player = getListOfPlayers(cursor).get(0);
+        return player;
     }
 
     public Cursor getAllCharacters() {
@@ -129,24 +136,53 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return rowId == -1;
     }
 
-    public Cursor getAllObjectsFromCharacter(String id) {
+    public Cursor getAllItemsFromCharacter(long id) {
         db = this.getReadableDatabase();
-        String[] selection = {id};
+        String[] selection = {String.valueOf(id)};
         Cursor cursor = db.rawQuery("SELECT * FROM " + PLAYER_ITEM_JUNCTION_TABLE_NAME + " WHERE " + JUNCTION_TABLE_PLAYER_ID + " = ?", selection);
         db.close();
         return cursor;
     }
 
+    public List<Player> getListOfPlayers(Cursor cursor) {
+        List<Player> players = new ArrayList<>();
+
+        while (cursor.moveToNext()) {
+            Player player = new Player();
+            player.setId(cursor.getLong(0));
+            player.setName(cursor.getString(1));
+            player.setMapXCoordinate(cursor.getInt(2));
+            player.setMapYCoordinate(cursor.getInt(3));
+            player.setScore(cursor.getInt(4));
+            player.setPlayerItems(getListOfPlayerItems(player.getId()));
+            players.add(player);
+        }
+        return players;
+    }
+
+    public List<Item> getListOfPlayerItems(long id) {
+        Cursor cursor = getAllItemsFromCharacter(id);
+        List<Item> playerItems = new ArrayList<>();
+        while (cursor.moveToNext()) {
+            Item item = new Item();
+            item.setId(cursor.getInt(0));
+            item.setName(cursor.getString(1));
+            item.setDescription(cursor.getString(2));
+            playerItems.add(item);
+        }
+        return playerItems;
+    }
+
     public boolean removeObjectFromInventory(String playerId, String itemId) {
         db = this.getWritableDatabase();
 
-        String whereClause = " WHERE Id in " + "(SELECT Id FROM " + PLAYER_ITEM_JUNCTION_TABLE_NAME +
+        String whereClause = " Id in " + "(SELECT Id FROM " + PLAYER_ITEM_JUNCTION_TABLE_NAME +
                 " WHERE " + JUNCTION_TABLE_PLAYER_ID + " = ? AND " + JUNCTION_TABLE_ITEM_ID + " = ? LIMIT 1)";
         String[] whereArgs = {playerId, itemId};
 
         int i = db.delete(PLAYER_ITEM_JUNCTION_TABLE_NAME, whereClause, whereArgs);
 
-          if (i == -1) {
+        if (i == -1) {
             return false;
         } else {
             return true;
