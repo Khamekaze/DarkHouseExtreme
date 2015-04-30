@@ -83,12 +83,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
-    public Cursor getOneCharacter(String id) {
+    public Player getOneCharacter(String id) {
         db = this.getReadableDatabase();
         String[] selection = {id};
         Cursor cursor = db.rawQuery("SELECT * FROM " + PLAYER_TABLE_NAME + " WHERE " + PLAYER_ID + " = ?", selection);
         db.close();
-        return cursor;
+
+        Player player = getListOfPlayers(cursor).get(0);
+        return player;
     }
 
     public Cursor getAllCharacters() {
@@ -173,7 +175,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
         return playerItems;
     }
-
 
     public boolean removeObjectFromInventory(String playerId, String itemId) {
         db = this.getWritableDatabase();
