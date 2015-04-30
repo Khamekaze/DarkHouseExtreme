@@ -105,7 +105,7 @@ public class SelectCharacterFragment extends Fragment {
                 if (player != null) {
                     helper.deleteCharacter(player.getName());
                 } else {
-                    Toast.makeText(context, "No character selected", Toast.LENGTH_LONG).show();
+                    Toast.makeText(context, "No character selected", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -143,7 +143,7 @@ public class SelectCharacterFragment extends Fragment {
                     intent.putExtra("player", player);
                     startActivity(intent);
                 } else {
-                    Toast.makeText(context, "No character selected", Toast.LENGTH_LONG).show();
+                    Toast.makeText(context, "No character selected", Toast.LENGTH_SHORT).show();
                 }
             }
         });
