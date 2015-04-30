@@ -9,6 +9,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 import com.bam.darkhouseextreme.app.model.Player;
 
+import java.util.List;
+
 /**
  * Created by Anders on 2015-04-28.
  */
@@ -81,7 +83,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public Cursor getOneCharacter(String id) {
         db = this.getReadableDatabase();
         String[] selection = {id};
-        Cursor cursor = db.rawQuery("SELECT * FROM " + PLAYER_TABLE_NAME + " WHERE " + PLAYER_ID + " = ?" , selection);
+        Cursor cursor = db.rawQuery("SELECT * FROM " + PLAYER_TABLE_NAME + " WHERE " + PLAYER_ID + " = ?", selection);
         db.close();
         return cursor;
     }
@@ -99,7 +101,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         contentValues.put(PLAYER_MAP_X, mapXCoordinate);
         contentValues.put(PLAYER_MAP_Y, mapYCoordinate);
         contentValues.put(PLAYER_SCORE, score);
-        String whereClause = " WHERE " + PLAYER_ID + " = ?";
+        String whereClause = PLAYER_ID + " = ?";
         String[] whereArgs = {id};
         db.update(PLAYER_TABLE_NAME, contentValues, whereClause, whereArgs);
 
@@ -109,7 +111,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public boolean deleteCharacter(String id) {
 
         db = this.getWritableDatabase();
-        String whereClause = " WHERE " + PLAYER_ID + " = ?";
+        String whereClause = PLAYER_ID + " = ?";
         String[] whereArgs = {id};
         db.delete(PLAYER_ITEM_JUNCTION_TABLE_NAME, whereClause, whereArgs);
         db.delete(PLAYER_TABLE_NAME, whereClause, whereArgs);
@@ -140,16 +142,23 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return cursor;
     }
 
+    public List<Object> getListOfPlayers(Cursor cursor) {
+
+
+    }
+
+
+
     public boolean removeObjectFromInventory(String playerId, String itemId) {
         db = this.getWritableDatabase();
 
-        String whereClause = " WHERE Id in " + "(SELECT Id FROM " + PLAYER_ITEM_JUNCTION_TABLE_NAME +
+        String whereClause = " Id in " + "(SELECT Id FROM " + PLAYER_ITEM_JUNCTION_TABLE_NAME +
                 " WHERE " + JUNCTION_TABLE_PLAYER_ID + " = ? AND " + JUNCTION_TABLE_ITEM_ID + " = ? LIMIT 1)";
         String[] whereArgs = {playerId, itemId};
 
         int i = db.delete(PLAYER_ITEM_JUNCTION_TABLE_NAME, whereClause, whereArgs);
 
-          if (i == -1) {
+        if (i == -1) {
             return false;
         } else {
             return true;
