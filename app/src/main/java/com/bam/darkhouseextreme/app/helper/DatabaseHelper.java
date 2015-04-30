@@ -44,7 +44,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL("CREATE TABLE IF NOT EXISTS " + PLAYER_TABLE_NAME + " (" + PLAYER_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-                        + PLAYER_NAME + " TEXT, " + PLAYER_MAP_X + " INTEGER, " + PLAYER_MAP_Y + " INTEGER)"
+                        + PLAYER_NAME + " TEXT, " + PLAYER_MAP_X + " INTEGER, " + PLAYER_MAP_Y + " INTEGER, " + PLAYER_SCORE + " INTEGER)"
         );
         db.execSQL("CREATE TABLE IF NOT EXISTS " + ITEM_TABLE_NAME + " (" + ITEM_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
                         + ITEM_NAME + " TEXT, " + ITEM_DESCRIPTION + " TEXT)"
@@ -99,7 +99,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         contentValues.put(PLAYER_MAP_X, mapXCoordinate);
         contentValues.put(PLAYER_MAP_Y, mapYCoordinate);
         contentValues.put(PLAYER_SCORE, score);
-        String whereClause = " WHERE " + PLAYER_ID + " = ?";
+        String whereClause = PLAYER_ID + " = ?";
         String[] whereArgs = {id};
         db.update(PLAYER_TABLE_NAME, contentValues, whereClause, whereArgs);
 
@@ -109,12 +109,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public boolean deleteCharacter(String id) {
 
         db = this.getWritableDatabase();
-        String whereClause = " WHERE " + PLAYER_ID + " = ?";
+        String whereClause = PLAYER_ID + " = ?";
         String[] whereArgs = {id};
-        db.delete(PLAYER_ITEM_JUNCTION_TABLE_NAME, whereClause, whereArgs);
-        db.delete(PLAYER_TABLE_NAME, whereClause, whereArgs);
-
-        return true;
+        if (db.delete(PLAYER_TABLE_NAME, whereClause, whereArgs) > 0) {
+            db.delete(PLAYER_ITEM_JUNCTION_TABLE_NAME, whereClause, whereArgs);
+            return true;
+        }
+        else return false;
     }
 
     public boolean addObjectToPlayerInventory(String playerId, String itemId) {
@@ -125,11 +126,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         long rowId = db.insert(PLAYER_ITEM_JUNCTION_TABLE_NAME, null, contentValues);
 
-        if (rowId == -1) {
-            return false;
-        } else {
-            return true;
-        }
+        return rowId == -1;
     }
 
     public Cursor getAllObjectsFromCharacter(String id) {
