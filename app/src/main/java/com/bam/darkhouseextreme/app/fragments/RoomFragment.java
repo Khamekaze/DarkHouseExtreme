@@ -15,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 import com.bam.darkhouseextreme.app.R;
 import com.bam.darkhouseextreme.app.helper.DatabaseHelper;
+import com.bam.darkhouseextreme.app.model.Item;
 import com.bam.darkhouseextreme.app.utilities.SaveUtility;
 import com.bam.darkhouseextreme.app.utilities.Utilities;
 
@@ -26,9 +27,9 @@ public class RoomFragment extends Fragment {
     private final String LOG_DATA = RoomFragment.class.getSimpleName();
 
     private View root;
-    private Button buttonUp, buttonDown, buttonLeft, buttonRight, itemButton;
+    private Button buttonUp, buttonDown, buttonLeft, buttonRight;
     private Context context;
-    private ImageView ltest;
+    private ImageView ltest, itemButton;
     private int x_cord, y_cord, score;
     private String itemPickedUpTag;
     private DatabaseHelper helper;
@@ -40,12 +41,13 @@ public class RoomFragment extends Fragment {
         context = getActivity().getApplicationContext();
         root = inflater.inflate(R.layout.room, container, false);
         ltest = (ImageView)root.findViewById(R.id.ltest);
+        helper = new DatabaseHelper(context);
 
         buttonUp = (Button)root.findViewById(R.id.buttonUp);
         buttonDown = (Button)root.findViewById(R.id.buttonDown);
         buttonLeft = (Button)root.findViewById(R.id.buttonLeft);
         buttonRight = (Button)root.findViewById(R.id.buttonRight);
-        itemButton = (Button) root.findViewById(R.id.key1);
+        itemButton = (ImageView) root.findViewById(R.id.key1);
 
         int[] stats = SaveUtility.loadStats();
         x_cord = stats[0];
@@ -124,10 +126,32 @@ public class RoomFragment extends Fragment {
         itemButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                itemButton.setClickable(false);
+//                itemButton.setClickable(false);
                 itemPickedUpTag = itemButton.getTag().toString();
-                SaveUtility.saveItemToCharacter(helper.getOneItem(itemPickedUpTag));
+                Log.d(LOG_DATA, "In room frag " + itemPickedUpTag);
+                Item item = helper.getOneItem(itemPickedUpTag);
+                SaveUtility.saveItemToCharacter(item);
+                Animation fadein = AnimationUtils.loadAnimation(context, R.anim.fade_in);
+                itemButton.setAnimation(fadein);
 
+                fadein.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation animation) {
+
+                    }
+
+                    @Override
+                    public void onAnimationEnd(Animation animation) {
+                        Animation fadeout = AnimationUtils.loadAnimation(context, R.anim.fade_out);
+                        itemButton.startAnimation(fadeout);
+
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(Animation animation) {
+
+                    }
+                });
             }
         });
     }

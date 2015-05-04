@@ -3,7 +3,16 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/room00">
+    android:background="#ff000000"
+
+    >
+
+    <ImageView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:id="@+id/ltest"
+        android:layout_marginRight="-1dp"
+        android:layout_marginLeft="-1dp" />
 
     <ImageView
         android:layout_centerInParent="true"
@@ -61,24 +70,19 @@
         />
 
     <ImageView
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:id="@+id/ltest"
-        android:layout_marginRight="-1dp"
-        android:layout_marginLeft="-1dp" />
-
-    <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/key1"
-        android:tag="key"
+        android:tag="1"
         android:layout_above="@+id/playerCharacter"
         android:layout_toRightOf="@+id/playerCharacter"
         android:layout_toEndOf="@+id/playerCharacter"
         android:layout_marginBottom="22dp"
-        android:background="#FFFFFF"
+        android:background="@drawable/key144"
+        android:visibility="visible"
         android:clickable="true"
         />
+
 
 
 </RelativeLayout>

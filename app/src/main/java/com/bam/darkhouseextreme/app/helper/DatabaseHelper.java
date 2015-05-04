@@ -120,8 +120,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             db.delete(PLAYER_ITEM_JUNCTION_TABLE_NAME, whereClause, whereArgs);
             db.close();
             return true;
-        }
-        else return false;
+        } else return false;
     }
 
     public boolean addObjectToPlayerInventory(String playerId, String itemId) {
@@ -129,10 +128,27 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         ContentValues contentValues = new ContentValues();
         contentValues.put(JUNCTION_TABLE_PLAYER_ID, playerId);
         contentValues.put(JUNCTION_TABLE_ITEM_ID, itemId);
-        db.close();
         long rowId = db.insert(PLAYER_ITEM_JUNCTION_TABLE_NAME, null, contentValues);
+        db.close();
 
         return rowId == -1;
+    }
+
+    public Item getOneItem(String id) {
+        db = this.getReadableDatabase();
+        String[] whereArgs = {id};
+        Item item = new Item();
+        Log.d(LOG_DATA, "Database intag " + id);
+//        Cursor cursor = db.rawQuery("SELECT * FROM " + ITEM_TABLE_NAME + " WHERE " + ITEM_ID + " = ?", whereArgs);
+//        while (cursor.moveToNext()) {
+//            item.setId(cursor.getInt(0));
+//            item.setName(cursor.getString(1));
+//            item.setDescription(cursor.getString(2));
+//        }
+        item.setId(1);
+        item.setName("Key");
+        item.setDescription("Can open doors");
+        return item;
     }
 
     private Cursor getAllItemsFromCharacter(long id) {
