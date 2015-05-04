@@ -1,6 +1,7 @@
 package com.bam.darkhouseextreme.app;
 
 import android.test.ActivityInstrumentationTestCase2;
+import android.widget.ListView;
 
 import com.bam.darkhouseextreme.app.activities.StartScreenActivity;
 import com.bam.darkhouseextreme.app.adapter.CharacterListAdapter;
@@ -16,17 +17,21 @@ import java.util.List;
  */
 public class SelectCharacterTest extends ActivityInstrumentationTestCase2<StartScreenActivity> {
 
+    public Player player;
+    public CharacterListAdapter cla;
 
-    public SelectCharacterTest(Class<StartScreenActivity> activityClass) {
-        super(activityClass);
+
+    public SelectCharacterTest() {
+        super(StartScreenActivity.class);
     }
 
     @Override
     protected void setUp() throws Exception {
-        List<Player> players = new ArrayList<>();
-        players.add(new Player(0, "Benji"));
-        CharacterListAdapter cla = new CharacterListAdapter(getActivity().getApplicationContext(), R.layout.characterselectionrow, players);
         super.setUp();
+        player = new Player(1, "Benji");
+        List<Player> players = new ArrayList<>();
+        players.add(player);
+        cla = new CharacterListAdapter(getActivity().getApplicationContext(), R.layout.characterselectionrow, players);
     }
 
     @Override
@@ -35,7 +40,7 @@ public class SelectCharacterTest extends ActivityInstrumentationTestCase2<StartS
     }
 
     public void testList() {
-
+        assertEquals(player, cla.getItem(0));
     }
 
 }
