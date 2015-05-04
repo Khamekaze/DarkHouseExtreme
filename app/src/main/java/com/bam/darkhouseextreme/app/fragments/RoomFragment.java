@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 import com.bam.darkhouseextreme.app.R;
+import com.bam.darkhouseextreme.app.helper.DatabaseHelper;
 import com.bam.darkhouseextreme.app.utilities.SaveUtility;
 import com.bam.darkhouseextreme.app.utilities.Utilities;
 
@@ -25,10 +26,12 @@ public class RoomFragment extends Fragment {
     private final String LOG_DATA = RoomFragment.class.getSimpleName();
 
     private View root;
-    private Button buttonUp, buttonDown, buttonLeft, buttonRight;
+    private Button buttonUp, buttonDown, buttonLeft, buttonRight, itemButton;
     private Context context;
     private ImageView ltest;
     private int x_cord, y_cord, score;
+    private String itemPickedUpTag;
+    private DatabaseHelper helper;
 
     @Nullable
     @Override
@@ -42,6 +45,7 @@ public class RoomFragment extends Fragment {
         buttonDown = (Button)root.findViewById(R.id.buttonDown);
         buttonLeft = (Button)root.findViewById(R.id.buttonLeft);
         buttonRight = (Button)root.findViewById(R.id.buttonRight);
+        itemButton = (Button) root.findViewById(R.id.key1);
 
         int[] stats = SaveUtility.loadStats();
         x_cord = stats[0];
@@ -54,6 +58,7 @@ public class RoomFragment extends Fragment {
         setButtonDown();
         setButtonLeft();
         setButtonRight();
+        setPickUpItem();
 
         return root;
     }
@@ -113,6 +118,18 @@ public class RoomFragment extends Fragment {
                     }
                 }
         );
+    }
+
+    private void setPickUpItem() {
+        itemButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                itemButton.setClickable(false);
+                itemPickedUpTag = itemButton.getTag().toString();
+                SaveUtility.saveItemToCharacter(helper.getOneItem(itemPickedUpTag));
+
+            }
+        });
     }
 
     private void changeRoom(final int roomId) {
