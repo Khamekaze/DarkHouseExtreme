@@ -2,7 +2,7 @@
 
 This repository contains the sourcecode for the Android game "House of Mystery"
 
-[![Download from Google Play](http://i.imgur.com/GpdN8hn.jpg?1)]
+![Download from Google Play](http://i.imgur.com/GpdN8hn.jpg?1)
 
 To report or view any issues or bugs, please see visit the [Issues](https://github.com/ChobiJava/DarkHouseExtreme/issues) tab.
 
