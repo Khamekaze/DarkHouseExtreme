@@ -13,6 +13,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
+
 import com.bam.darkhouseextreme.app.R;
 import com.bam.darkhouseextreme.app.helper.DatabaseHelper;
 import com.bam.darkhouseextreme.app.model.Item;
@@ -29,7 +30,7 @@ public class RoomFragment extends Fragment {
     private View root;
     private Button buttonUp, buttonDown, buttonLeft, buttonRight;
     private Context context;
-    private ImageView ltest, itemButton;
+    private ImageView ltest, itemButton1, itemButton2, itemButton3;
     private int x_cord, y_cord, score;
     private String itemPickedUpTag;
     private DatabaseHelper helper;
@@ -40,19 +41,19 @@ public class RoomFragment extends Fragment {
 
         context = getActivity().getApplicationContext();
         root = inflater.inflate(R.layout.room, container, false);
-        ltest = (ImageView)root.findViewById(R.id.ltest);
+        ltest = (ImageView) root.findViewById(R.id.ltest);
         helper = new DatabaseHelper(context);
 
-        buttonUp = (Button)root.findViewById(R.id.buttonUp);
-        buttonDown = (Button)root.findViewById(R.id.buttonDown);
-        buttonLeft = (Button)root.findViewById(R.id.buttonLeft);
-        buttonRight = (Button)root.findViewById(R.id.buttonRight);
-        itemButton = (ImageView) root.findViewById(R.id.item1);
+        buttonUp = (Button) root.findViewById(R.id.buttonUp);
+        buttonDown = (Button) root.findViewById(R.id.buttonDown);
+        buttonLeft = (Button) root.findViewById(R.id.buttonLeft);
+        buttonRight = (Button) root.findViewById(R.id.buttonRight);
+
 
         int[] stats = SaveUtility.loadStats();
         x_cord = stats[0];
         y_cord = stats[1];
-        score  = stats[2];
+        score = stats[2];
 
         continueIfApplicable(x_cord, y_cord);
 
@@ -61,6 +62,7 @@ public class RoomFragment extends Fragment {
         setButtonLeft();
         setButtonRight();
         setPickUpItem();
+        setItemButtons();
 
         return root;
     }
@@ -71,8 +73,8 @@ public class RoomFragment extends Fragment {
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if (!isRoom(x_cord, y_cord+=1)) {
-                            y_cord-=1;
+                        if (!isRoom(x_cord, y_cord += 1)) {
+                            y_cord -= 1;
                             informOfError();
                         }
                     }
@@ -85,8 +87,8 @@ public class RoomFragment extends Fragment {
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if (!isRoom(x_cord, y_cord-=1)) {
-                            y_cord+=1;
+                        if (!isRoom(x_cord, y_cord -= 1)) {
+                            y_cord += 1;
                             informOfError();
                         }
                     }
@@ -99,8 +101,8 @@ public class RoomFragment extends Fragment {
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if (!isRoom(x_cord-=1, y_cord)) {
-                            x_cord+=1;
+                        if (!isRoom(x_cord -= 1, y_cord)) {
+                            x_cord += 1;
                             informOfError();
                         }
                     }
@@ -113,8 +115,8 @@ public class RoomFragment extends Fragment {
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if (!isRoom(x_cord+=1, y_cord)) {
-                            x_cord-=1;
+                        if (!isRoom(x_cord += 1, y_cord)) {
+                            x_cord -= 1;
                             informOfError();
                         }
                     }
@@ -122,20 +124,47 @@ public class RoomFragment extends Fragment {
         );
     }
 
+    private void setItemButtons() {
+        for (int i = 1; i < 4; i++) {
+            int itemID;
+            try {
+                itemID = root.getResources().getIdentifier(
+                        "item" + i + "" + String.valueOf(x_cord) + "" + String.valueOf(y_cord), "drawable", context.getPackageName());
+            } catch (Exception e) {
+                itemID = 0;
+            }
+            if (itemID != 0) {
+                switch (i) {
+                    case 1:
+                        itemButton1 = (ImageView) root.findViewById(itemID);
+                        break;
+                    case 2:
+                        itemButton2 = (ImageView) root.findViewById(itemID);
+                        break;
+                    case 3:
+                        itemButton3 = (ImageView) root.findViewById(itemID);
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+    }
+
     private void setPickUpItem() {
-        itemButton.setOnClickListener(new View.OnClickListener() {
+        itemButton1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 //                itemButton.setClickable(false);
-                itemPickedUpTag = itemButton.getTag().toString();
+                itemPickedUpTag = itemButton1.getTag().toString();
                 final int itemID = Utilities.isViableItem(itemPickedUpTag, context, x_cord, y_cord);
                 if (itemID != 0) {
-                    itemButton.setImageResource(itemID);
+                    itemButton1.setImageResource(itemID);
                     Item item = helper.getOneItem(itemPickedUpTag);
                     SaveUtility.saveItemToCharacter(item);
                     Animation fadein = AnimationUtils.loadAnimation(context, R.anim.fade_in);
 
-                    itemButton.setAnimation(fadein);
+                    itemButton1.setAnimation(fadein);
 
                     fadein.setAnimationListener(new Animation.AnimationListener() {
                         @Override
@@ -147,7 +176,7 @@ public class RoomFragment extends Fragment {
                         public void onAnimationEnd(Animation animation) {
                             Animation fadeout = AnimationUtils.loadAnimation(context, R.anim.fade_out);
                             fadeout.setFillAfter(true);
-                            itemButton.startAnimation(fadeout);
+                            itemButton1.startAnimation(fadeout);
 
 
                         }
@@ -208,10 +237,9 @@ public class RoomFragment extends Fragment {
         if ((roomId = Utilities.isViableRoom(room, context)) != 0) {
             changeRoom(roomId);
             Log.d(LOG_DATA, String.valueOf(x) + ", " + String.valueOf(y) + ", " + String.valueOf(score));
-            SaveUtility.saveProgress(x, y, score +=10);
+            SaveUtility.saveProgress(x, y, score += 10);
             return true;
-        }
-        else return false;
+        } else return false;
 
     }
 

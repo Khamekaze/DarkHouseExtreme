@@ -72,7 +72,7 @@
     <ImageView
         android:layout_width="100dp"
         android:layout_height="50dp"
-        android:id="@+id/item1"
+        android:id="@+id/item100"
         android:tag="1"
         android:layout_above="@+id/playerCharacter"
         android:layout_toRightOf="@+id/playerCharacter"
@@ -80,6 +80,25 @@
         android:layout_marginBottom="22dp"
         android:clickable="true"
         />
+    <ImageView
+        android:layout_width="75dp"
+        android:layout_height="75dp"
+        android:id="@+id/item200"
+        android:tag="1"
+        android:clickable="true"
+        android:layout_alignBottom="@+id/playerCharacter"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+    <ImageView
+        android:layout_width="85dp"
+        android:layout_height="50dp"
+        android:id="@+id/item301"
+        android:tag="1"
+        android:clickable="true"
+        android:layout_alignParentBottom="true"
+        android:layout_toRightOf="@+id/buttonDown"
+        android:layout_toEndOf="@+id/buttonDown" />
 
 
 
