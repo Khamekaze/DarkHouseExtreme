@@ -83,6 +83,30 @@ public class Utilities {
     }
 
     /**
+     * Checks if the item exist in drawable.
+     *
+     * @param itemID - The concatenated String of X, and Y-coordinates.
+     * @param context - The Context of the Application.
+     *
+     * @return drawable id if exist, else 0.
+     *
+     */
+
+    public static int isViableItem(String itemID, Context context, int x, int y) {
+
+        try {
+            int drawableID = context.getResources().getIdentifier(
+                    "item" + itemID + "" + String.valueOf(x) + "" + String.valueOf(y), "drawable", context.getPackageName()
+            );
+
+            return drawableID;
+
+        } catch (Exception e) {
+            return 0;
+        }
+    }
+
+    /**
      * Checks if the room going to has a door that needs an item to open.
      *
      * @param x - The X-coordinate of the room.

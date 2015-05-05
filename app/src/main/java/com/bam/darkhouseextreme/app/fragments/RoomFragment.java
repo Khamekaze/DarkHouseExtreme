@@ -47,7 +47,7 @@ public class RoomFragment extends Fragment {
         buttonDown = (Button)root.findViewById(R.id.buttonDown);
         buttonLeft = (Button)root.findViewById(R.id.buttonLeft);
         buttonRight = (Button)root.findViewById(R.id.buttonRight);
-        itemButton = (ImageView) root.findViewById(R.id.key1);
+        itemButton = (ImageView) root.findViewById(R.id.item1);
 
         int[] stats = SaveUtility.loadStats();
         x_cord = stats[0];
@@ -128,30 +128,38 @@ public class RoomFragment extends Fragment {
             public void onClick(View v) {
 //                itemButton.setClickable(false);
                 itemPickedUpTag = itemButton.getTag().toString();
-                Log.d(LOG_DATA, "In room frag " + itemPickedUpTag);
-                Item item = helper.getOneItem(itemPickedUpTag);
-                SaveUtility.saveItemToCharacter(item);
-                Animation fadein = AnimationUtils.loadAnimation(context, R.anim.fade_in);
-                itemButton.setAnimation(fadein);
+                final int itemID = Utilities.isViableItem(itemPickedUpTag, context, x_cord, y_cord);
+                if (itemID != 0) {
+                    itemButton.setImageResource(itemID);
+                    Item item = helper.getOneItem(itemPickedUpTag);
+                    SaveUtility.saveItemToCharacter(item);
+                    Animation fadein = AnimationUtils.loadAnimation(context, R.anim.fade_in);
 
-                fadein.setAnimationListener(new Animation.AnimationListener() {
-                    @Override
-                    public void onAnimationStart(Animation animation) {
+                    itemButton.setAnimation(fadein);
 
-                    }
+                    fadein.setAnimationListener(new Animation.AnimationListener() {
+                        @Override
+                        public void onAnimationStart(Animation animation) {
 
-                    @Override
-                    public void onAnimationEnd(Animation animation) {
-                        Animation fadeout = AnimationUtils.loadAnimation(context, R.anim.fade_out);
-                        itemButton.startAnimation(fadeout);
+                        }
 
-                    }
+                        @Override
+                        public void onAnimationEnd(Animation animation) {
+                            Animation fadeout = AnimationUtils.loadAnimation(context, R.anim.fade_out);
+                            fadeout.setFillAfter(true);
+                            itemButton.startAnimation(fadeout);
 
-                    @Override
-                    public void onAnimationRepeat(Animation animation) {
 
-                    }
-                });
+                        }
+
+                        @Override
+                        public void onAnimationRepeat(Animation animation) {
+
+                        }
+                    });
+                } else {
+                    noItemMessage();
+                }
             }
         });
     }
@@ -182,6 +190,11 @@ public class RoomFragment extends Fragment {
 
             }
         });
+    }
+
+    private void noItemMessage() {
+        Toast.makeText(context, "Nothing to be found here", Toast.LENGTH_LONG)
+                .show();
     }
 
     private void informOfError() {
