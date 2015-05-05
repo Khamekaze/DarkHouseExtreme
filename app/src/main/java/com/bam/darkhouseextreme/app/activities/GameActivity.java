@@ -37,4 +37,11 @@ public class GameActivity extends FragmentActivity {
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
     }
+
+    @Override
+    public void onBackPressed() {
+        setResult(1);
+        finish();
+
+    }
 }
