@@ -1,7 +1,10 @@
 package com.bam.darkhouseextreme.app.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 import android.view.Window;
 import android.view.WindowManager;
 import com.bam.darkhouseextreme.app.R;
@@ -22,9 +25,11 @@ public class StartScreenActivity extends FragmentActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.startactivity);
+        StartScreenFragment fragment = new StartScreenFragment();
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.startscreenlayout, new StartScreenFragment(), "startScreen")
+                    .add(R.id.startscreenlayout, fragment, "startScreen")
+                    .addToBackStack("StartScreen")
                     .commit();
         }
     }
@@ -56,4 +61,29 @@ public class StartScreenActivity extends FragmentActivity {
 //
 //        return super.onOptionsItemSelected(item);
 //    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Log.d("Test", "got here");
+        Log.d("test", String.valueOf(requestCode) + ", " + String.valueOf(resultCode));
+        if (resultCode == 1) {
+            new Handler().post(new Runnable() {
+                @Override
+                public void run() {
+                    getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.startscreenlayout, getSupportFragmentManager().findFragmentByTag("startScreen"))
+                            .commitAllowingStateLoss();
+                }
+            });
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        StartScreenFragment fragment = (StartScreenFragment) getSupportFragmentManager().findFragmentByTag("startScreen");
+        if (fragment.isVisible()) {
+            finish();
+        }
+    }
 }

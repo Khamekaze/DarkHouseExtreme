@@ -56,7 +56,7 @@ public class CreateCharacterFragment extends Fragment {
 //                        Player player = helper.createCharacter(editText.getText().toString());
                         Intent intent = new Intent(context, GameActivity.class);
 //                        intent.putExtra("player", player);
-                        startActivity(intent);
+                        startActivityForResult(intent, 1);
                     }
                 }
         );
