@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#ff000000"
-
+    android:id="@+id/mainRel"
     >
 
     <Button
@@ -55,40 +55,7 @@
         android:background="@drawable/circularbutton"
         />
 
-    <Button
-        android:layout_width="100dp"
-        android:layout_height="50dp"
-        android:id="@+id/item100"
-        android:tag="1"
-        android:layout_above="@+id/playerCharacter"
-        android:layout_toRightOf="@+id/playerCharacter"
-        android:layout_toEndOf="@+id/playerCharacter"
-        android:layout_marginBottom="22dp"
-        android:background="#00000000"
-        />
-    <Button
-        android:layout_width="75dp"
-        android:layout_height="75dp"
-        android:id="@+id/item301"
-        android:tag="3"
-        android:layout_alignBottom="@+id/playerCharacter"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:background="#00000000"
-        />
 
-    <Button
-        android:layout_width="85dp"
-        android:layout_height="50dp"
-        android:id="@+id/item200"
-        android:tag="2"
-        android:layout_below="@+id/buttonUp"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginLeft="40dp"
-        android:layout_marginStart="40dp"
-        android:background="#00000000"
-        />
 
     <ImageView
             android:layout_width="fill_parent"

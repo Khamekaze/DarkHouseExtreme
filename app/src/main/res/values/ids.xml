@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <item type="id" name="room1item1">room100</item>
-    <item type="id" name="room1item2">room200</item>
-    <item type="id" name="room1item3">room300</item>
+    <item type="id" name="item100" />
+    <item type="id" name="item200" />
+    <item type="id" name="item300" />
 </resources>
