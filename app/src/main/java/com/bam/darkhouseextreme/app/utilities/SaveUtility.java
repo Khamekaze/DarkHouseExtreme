@@ -37,9 +37,10 @@ public class SaveUtility {
         return helper.getAllCharacters();
     }
 
-    public static void saveItemToCharacter(Item item) {
-        boolean hasAdded = helper.addObjectToPlayerInventory(String.valueOf(player.getId()), String.valueOf(item.getId()));
-        Log.d(LOG_DATA, "Added to player inventory: " + hasAdded);
+    public static void saveItemToCharacter(String itemID) {
+        Item item = helper.getOneItem(itemID);
+        boolean added = helper.addObjectToPlayerInventory(String.valueOf(player.getId()), String.valueOf(item.getId()));
+        Log.d(LOG_DATA, "Added to player inventory: " + added);
         player.getPlayerItems().add(item);
     }
 
@@ -65,9 +66,10 @@ public class SaveUtility {
     }
 
     public static boolean alreadyHasItem(String itemID) {
+
         Item item = helper.getOneItem(itemID);
         List<Item> inventory = helper.getListOfPlayerItems(player.getId());
-        if(inventory.size()>0) {
+        if (inventory.size() > 0) {
             Log.d(LOG_DATA, "Item id: " + itemID + ", Inventory item id: " + inventory.get(0).getId());
         }
         Log.d(LOG_DATA, "Inventory length (DB): " + inventory.size());

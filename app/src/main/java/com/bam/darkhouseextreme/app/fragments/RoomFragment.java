@@ -22,7 +22,6 @@ import android.widget.Toast;
 import com.bam.darkhouseextreme.app.R;
 import com.bam.darkhouseextreme.app.adapter.Shaker;
 import com.bam.darkhouseextreme.app.helper.DatabaseHelper;
-import com.bam.darkhouseextreme.app.model.Item;
 import com.bam.darkhouseextreme.app.utilities.SaveUtility;
 import com.bam.darkhouseextreme.app.utilities.Utilities;
 
@@ -41,7 +40,6 @@ public class RoomFragment extends Fragment {
     private Context context;
     private ImageView roomImage;
     private int x_cord, y_cord, score;
-    private String itemPickedUpTag;
     private DatabaseHelper helper;
 
     private List<Button> eventsInRoom = new ArrayList<>();
@@ -194,63 +192,60 @@ public class RoomFragment extends Fragment {
     }
 
     private void setItemClickListener(Button itemButton) {
-        final String itemID = String.valueOf(itemButton.getTag());
 
         itemButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
-                if (!SaveUtility.alreadyHasItem(itemID)) {
-//                    SaveUtility.saveItemToCharacter(helper.getOneItem(itemID));
+
+                String idOfPickedUpItem = v.getTag().toString();
+                int drawableID = Utilities.isViableItem(idOfPickedUpItem, context, x_cord, y_cord);
+
+                if (!SaveUtility.alreadyHasItem(idOfPickedUpItem) && drawableID != 0) {
                     v.setClickable(false);
-                    itemPickedUpTag = v.getTag().toString();
-                    final int itemID = Utilities.isViableItem(itemPickedUpTag, context, x_cord, y_cord);
-                    if (itemID != 0) {
-                        v.setBackgroundResource(itemID);
-                        Item item = helper.getOneItem(itemPickedUpTag);
-                        SaveUtility.saveItemToCharacter(item);
-                        Animation fadein = AnimationUtils.loadAnimation(context, R.anim.fade_in);
+                    v.setBackgroundResource(drawableID);
+                    SaveUtility.saveItemToCharacter(idOfPickedUpItem);
+                    Animation fadein = AnimationUtils.loadAnimation(context, R.anim.fade_in);
 
-                        v.startAnimation(fadein);
+                    v.startAnimation(fadein);
 
-                        fadein.setAnimationListener(new Animation.AnimationListener() {
-                            @Override
-                            public void onAnimationStart(Animation animation) {
+                    fadein.setAnimationListener(new Animation.AnimationListener() {
+                        @Override
+                        public void onAnimationStart(Animation animation) {
 
-                            }
+                        }
 
-                            @Override
-                            public void onAnimationEnd(Animation animation) {
-                                Animation fadeout = AnimationUtils.loadAnimation(context, R.anim.fade_out);
-                                v.startAnimation(fadeout);
-                                fadeout.setAnimationListener(new Animation.AnimationListener() {
-                                    @Override
-                                    public void onAnimationStart(Animation animation) {
+                        @Override
+                        public void onAnimationEnd(Animation animation) {
+                            Animation fadeout = AnimationUtils.loadAnimation(context, R.anim.fade_out);
+                            v.startAnimation(fadeout);
+                            fadeout.setAnimationListener(new Animation.AnimationListener() {
+                                @Override
+                                public void onAnimationStart(Animation animation) {
 
-                                    }
+                                }
 
-                                    @Override
-                                    public void onAnimationEnd(Animation animation) {
-                                        v.setBackgroundResource(R.drawable.placeholder);
-                                        eventsInRoom.remove(v);
-                                    }
+                                @Override
+                                public void onAnimationEnd(Animation animation) {
+                                    v.setBackgroundResource(R.drawable.placeholder);
+                                    eventsInRoom.remove(v);
+                                }
 
-                                    @Override
-                                    public void onAnimationRepeat(Animation animation) {
+                                @Override
+                                public void onAnimationRepeat(Animation animation) {
 
-                                    }
-                                });
+                                }
+                            });
 
 
-                            }
+                        }
 
-                            @Override
-                            public void onAnimationRepeat(Animation animation) {
+                        @Override
+                        public void onAnimationRepeat(Animation animation) {
 
-                            }
-                        });
-                    } else {
-                        noItemMessage();
-                    }
+                        }
+                    });
+                } else {
+                    noItemMessage();
                 }
             }
         });
@@ -291,12 +286,12 @@ public class RoomFragment extends Fragment {
     }
 
     private void noItemMessage() {
-        Toast.makeText(context, "Nothing to be found here", Toast.LENGTH_LONG)
+        Toast.makeText(context, "There could have been an item here. But there is none.", Toast.LENGTH_SHORT)
                 .show();
     }
 
     private void informOfError() {
-        Toast.makeText(context, "Can't go this way", Toast.LENGTH_LONG)
+        Toast.makeText(context, "Can't go this way", Toast.LENGTH_SHORT)
                 .show();
     }
 
@@ -324,8 +319,8 @@ public class RoomFragment extends Fragment {
         for (final Button event : eventsInRoom) {
             Log.d(LOG_DATA, "Button status: " + String.valueOf(event != null));
             Log.d(LOG_DATA, "Button ID. " + String.valueOf(event.getId()));
-//            if (event != null) {
-//                event.setVisibility(View.VISIBLE);
+            if (SaveUtility.alreadyHasItem(String.valueOf(event.getTag()))) {
+            }
             event.setBackgroundResource(R.drawable.item_button);
             event.startAnimation(animation);
             new Handler().postDelayed(new Runnable() {
@@ -333,40 +328,15 @@ public class RoomFragment extends Fragment {
                                           public void run() {
                                               animation.cancel();
                                               event.setBackgroundResource(R.drawable.placeholder);
+
                                           }
                                       },
                     500);
-//                event.setBackgroundResource(R.drawable.placeholder);
-            Log.d(LOG_DATA, "Button tag: " + String.valueOf(event.getTag()));
-
-//                event.setVisibility(View.INVISIBLE);
-//            }
         }
     }
 
     public void createButtons() {
         String coordinates = String.valueOf(x_cord) + String.valueOf(y_cord);
-
-//        itemButton1 = new Button(context);
-//        itemButton2 = new Button(context);
-//        itemButton3 = new Button(context);
-//
-//
-//        itemButton1.setTag(1);
-//        itemButton2.setTag(2);
-//        itemButton3.setTag(3);
-//        itemButton1.setBackgroundResource(R.drawable.placeholder);
-//        itemButton2.setBackgroundResource(R.drawable.placeholder);
-//        itemButton3.setBackgroundResource(R.drawable.placeholder);
-//        itemButton1.setId((R.id.item100));
-//        itemButton2.setId((R.id.item200));
-//        itemButton3.setId((R.id.item300));
-//        eventsInRoom.add(itemButton1);
-//        eventsInRoom.add(itemButton2);
-//        eventsInRoom.add(itemButton3);
-
-        Log.d(LOG_DATA, "Coordinates: " + coordinates);
-
 
         switch (coordinates) {
             case "00":
@@ -394,12 +364,14 @@ public class RoomFragment extends Fragment {
         itemButton1.setId((R.id.item100));
         itemButton2.setId((R.id.item200));
         itemButton3.setId((R.id.item300));
-        setItemClickListener(itemButton1);
-        setItemClickListener(itemButton2);
-        setItemClickListener(itemButton3);
+
         eventsInRoom.add(itemButton1);
         eventsInRoom.add(itemButton2);
         eventsInRoom.add(itemButton3);
+
+        for (Button b : eventsInRoom) {
+            setItemClickListener(b);
+        }
     }
 
 
@@ -420,12 +392,10 @@ public class RoomFragment extends Fragment {
         mainRelativeLayout.addView(itemButton1);
 
         params2.setMargins((screenWidth - 100), 0, 0, 0);
-//        mainRelativeLayout.addView(itemButton3, buttonDetails);
         itemButton2.setLayoutParams(params2);
         mainRelativeLayout.addView(itemButton2);
 
         params3.setMargins(200, (screenHeight / 3) * 2, 0, 0);
-//        mainRelativeLayout.addView(itemButton2, buttonDetails);
         itemButton3.setLayoutParams(params3);
         mainRelativeLayout.addView(itemButton3);
 
