@@ -106,6 +106,8 @@ public class Utilities {
         }
     }
 
+
+
     /**
      * Checks if the room going to has a door that needs an item to open.
      *
