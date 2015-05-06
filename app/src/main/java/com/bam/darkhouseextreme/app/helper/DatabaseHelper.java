@@ -2,12 +2,15 @@ package com.bam.darkhouseextreme.app.helper;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.res.Resources;
+import android.content.res.TypedArray;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import android.util.Log;
 
+import com.bam.darkhouseextreme.app.R;
 import com.bam.darkhouseextreme.app.model.Item;
 import com.bam.darkhouseextreme.app.model.Player;
 
@@ -131,25 +134,46 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         long rowId = db.insert(PLAYER_ITEM_JUNCTION_TABLE_NAME, null, contentValues);
         db.close();
 
-        return rowId == -1;
+        return rowId != -1;
+    }
+
+    public boolean createItem(Resources res) {
+        db = this.getWritableDatabase();
+        TypedArray items = res.obtainTypedArray(R.array.items);
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(ITEM_NAME, items.getString(0));
+        contentValues.put(ITEM_DESCRIPTION, items.getString(1));
+        long l = db.insert(ITEM_TABLE_NAME, null, contentValues);
+        if (l != -1) {
+            return true;
+        }
+        return false;
     }
 
     public Item getOneItem(String id) {
         db = this.getReadableDatabase();
         String[] whereArgs = {id};
         Item item = new Item();
-        Log.d(LOG_DATA, "Database intag " + id);
-//        Cursor cursor = db.rawQuery("SELECT * FROM " + ITEM_TABLE_NAME + " WHERE " + ITEM_ID + " = ?", whereArgs);
-//        while (cursor.moveToNext()) {
-//            item.setId(cursor.getInt(0));
-//            item.setName(cursor.getString(1));
-//            item.setDescription(cursor.getString(2));
-//        }
-        item.setId(1);
-        item.setName("Key");
-        item.setDescription("Can open doors");
+        Cursor cursor = db.rawQuery("SELECT * FROM " + ITEM_TABLE_NAME + " WHERE " + ITEM_ID + " = ?", whereArgs);
+        while (cursor.moveToNext()) {
+            item.setId(cursor.getInt(0));
+            item.setName(cursor.getString(1));
+            item.setDescription(cursor.getString(2));
+        }
+//        item.setId(1);
+//        item.setName("Key");
+//        item.setDescription("Can open doors");
         return item;
     }
+
+//    public Item getOneItemFromCharacter(String itemId) {
+//        db = this.getReadableDatabase();
+//        String[] whereArgs = {itemId};
+//
+//
+//
+//    }
+
 
     private Cursor getAllItemsFromCharacter(long id) {
         db = this.getReadableDatabase();

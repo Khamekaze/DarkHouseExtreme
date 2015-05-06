@@ -4,7 +4,9 @@ import android.content.Context;
 import android.graphics.Point;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
+import android.graphics.Point;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -15,14 +17,15 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 import com.bam.darkhouseextreme.app.R;
 import com.bam.darkhouseextreme.app.adapter.Shaker;
 import com.bam.darkhouseextreme.app.helper.DatabaseHelper;
-import com.bam.darkhouseextreme.app.model.Item;
 import com.bam.darkhouseextreme.app.utilities.SaveUtility;
 import com.bam.darkhouseextreme.app.utilities.Utilities;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -37,10 +40,8 @@ public class RoomFragment extends Fragment {
     private Context context;
     private ImageView roomImage;
     private int x_cord, y_cord, score;
-    private String itemPickedUpTag;
-    private DatabaseHelper helper;
 
-    private List<Button> eventsInRoom;
+    private List<Button> eventsInRoom = new ArrayList<>();
 
     private SensorManager sManager;
     private Sensor sensor;
@@ -65,9 +66,11 @@ public class RoomFragment extends Fragment {
             }
         });
 
+
         root = inflater.inflate(R.layout.room, container, false);
-        roomImage = (ImageView)root.findViewById(R.id.roomImage);
-        helper = new DatabaseHelper(context);
+
+        roomImage = (ImageView) root.findViewById(R.id.roomImage);
+
 
         buttonUp = (Button) root.findViewById(R.id.buttonUp);
         buttonDown = (Button) root.findViewById(R.id.buttonDown);
@@ -89,11 +92,6 @@ public class RoomFragment extends Fragment {
         setButtonLeft();
         setButtonRight();
 
-        // Width and height of window
-        Point size = new Point();
-        getActivity().getWindowManager().getDefaultDisplay().getSize(size);
-        int screenWidth = size.x;
-        int screenHeight = size.y;
 
         return root;
     }
@@ -168,7 +166,6 @@ public class RoomFragment extends Fragment {
                 switch (i) {
                     case 1:
                         itemButton1 = (Button) root.findViewById(itemID);
-                        Log.d(LOG_DATA,"Button 1 tag: " + itemButton1.getTag().toString());
                         break;
                     case 2:
                         itemButton2 = (Button) root.findViewById(itemID);
@@ -183,184 +180,71 @@ public class RoomFragment extends Fragment {
         }
     }
 
-    private void setPickUpItem() {
-        if (itemButton1 != null) {
-            itemButton1.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    itemButton1.setClickable(false);
-                    itemPickedUpTag = itemButton1.getTag().toString();
-                    final int itemID = Utilities.isViableItem(itemPickedUpTag, context, x_cord, y_cord);
-                    if (itemID != 0) {
-                        itemButton1.setBackgroundResource(itemID);
-                        Item item = helper.getOneItem(itemPickedUpTag);
-                        SaveUtility.saveItemToCharacter(item);
-                        Animation fadein = AnimationUtils.loadAnimation(context, R.anim.fade_in);
+    private void setItemClickListener(Button itemButton) {
 
-                        itemButton1.startAnimation(fadein);
+        itemButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View v) {
 
-                        fadein.setAnimationListener(new Animation.AnimationListener() {
-                            @Override
-                            public void onAnimationStart(Animation animation) {
+                String idOfPickedUpItem = v.getTag().toString();
+                int drawableID = Utilities.isViableItem(idOfPickedUpItem, context, x_cord, y_cord);
 
-                            }
+                if (!SaveUtility.alreadyHasItem(idOfPickedUpItem) && drawableID != 0) {
+//                    v.setClickable(false);
+                    v.setBackgroundResource(drawableID);
+                    SaveUtility.saveItemToCharacter(idOfPickedUpItem);
+                    Animation fadein = AnimationUtils.loadAnimation(context, R.anim.fade_in);
 
-                            @Override
-                            public void onAnimationEnd(Animation animation) {
-                                Animation fadeout = AnimationUtils.loadAnimation(context, R.anim.fade_out);
-//                                fadeout.setFillAfter(true);
-                                itemButton1.startAnimation(fadeout);
-                                fadeout.setAnimationListener(new Animation.AnimationListener() {
-                                    @Override
-                                    public void onAnimationStart(Animation animation) {
+                    v.startAnimation(fadein);
 
-                                    }
+                    fadein.setAnimationListener(new Animation.AnimationListener() {
+                        @Override
+                        public void onAnimationStart(Animation animation) {
 
-                                    @Override
-                                    public void onAnimationEnd(Animation animation) {
-                                        itemButton1.setBackgroundResource(R.color.transparent);
-                                    }
+                        }
 
-                                    @Override
-                                    public void onAnimationRepeat(Animation animation) {
+                        @Override
+                        public void onAnimationEnd(Animation animation) {
+                            Animation fadeout = AnimationUtils.loadAnimation(context, R.anim.fade_out);
+                            v.startAnimation(fadeout);
+                            fadeout.setAnimationListener(new Animation.AnimationListener() {
+                                @Override
+                                public void onAnimationStart(Animation animation) {
 
-                                    }
-                                });
+                                }
+
+                                @Override
+                                public void onAnimationEnd(Animation animation) {
+                                    v.setBackgroundResource(R.drawable.placeholder);
+                                    eventsInRoom.remove(v);
+                                }
+
+                                @Override
+                                public void onAnimationRepeat(Animation animation) {
+
+                                }
+                            });
 
 
-                            }
+                        }
 
-                            @Override
-                            public void onAnimationRepeat(Animation animation) {
+                        @Override
+                        public void onAnimationRepeat(Animation animation) {
 
-                            }
-                        });
-                    } else {
-                        noItemMessage();
-                    }
+                        }
+                    });
+                } else {
+                    noItemMessage();
                 }
-            });
-        }
-        if (itemButton2 != null) {
-            itemButton2.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    itemButton2.setClickable(false);
-                    itemPickedUpTag = itemButton2.getTag().toString();
-                    final int itemID = Utilities.isViableItem(itemPickedUpTag, context, x_cord, y_cord);
-                    if (itemID != 0) {
-                        itemButton2.setBackgroundResource(itemID);
-                        Item item = helper.getOneItem(itemPickedUpTag);
-                        SaveUtility.saveItemToCharacter(item);
-                        Animation fadein = AnimationUtils.loadAnimation(context, R.anim.fade_in);
-
-                        itemButton2.startAnimation(fadein);
-
-                        fadein.setAnimationListener(new Animation.AnimationListener() {
-                            @Override
-                            public void onAnimationStart(Animation animation) {
-
-                            }
-
-                            @Override
-                            public void onAnimationEnd(Animation animation) {
-                                Animation fadeout = AnimationUtils.loadAnimation(context, R.anim.fade_out);
-//                                fadeout.setFillAfter(true);
-                                itemButton2.startAnimation(fadeout);
-                                fadeout.setAnimationListener(new Animation.AnimationListener() {
-                                    @Override
-                                    public void onAnimationStart(Animation animation) {
-
-                                    }
-
-                                    @Override
-                                    public void onAnimationEnd(Animation animation) {
-                                        itemButton2.setBackgroundResource(R.color.transparent);
-                                    }
-
-                                    @Override
-                                    public void onAnimationRepeat(Animation animation) {
-
-                                    }
-                                });
-
-                            }
-
-                            @Override
-                            public void onAnimationRepeat(Animation animation) {
-
-                            }
-                        });
-                    } else {
-                        noItemMessage();
-                    }
-                }
-            });
-        }
-        if (itemButton3 != null) {
-            itemButton3.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    itemButton3.setClickable(false);
-                    itemPickedUpTag = itemButton3.getTag().toString();
-                    final int itemID = Utilities.isViableItem(itemPickedUpTag, context, x_cord, y_cord);
-                    if (itemID != 0) {
-                        itemButton3.setBackgroundResource(itemID);
-                        Item item = helper.getOneItem(itemPickedUpTag);
-                        SaveUtility.saveItemToCharacter(item);
-                        Animation fadein = AnimationUtils.loadAnimation(context, R.anim.fade_in);
-
-                        itemButton3.startAnimation(fadein);
-
-                        fadein.setAnimationListener(new Animation.AnimationListener() {
-                            @Override
-                            public void onAnimationStart(Animation animation) {
-
-                            }
-
-                            @Override
-                            public void onAnimationEnd(Animation animation) {
-                                Animation fadeout = AnimationUtils.loadAnimation(context, R.anim.fade_out);
-//                                fadeout.setFillAfter(true);
-                                itemButton3.startAnimation(fadeout);
-                                fadeout.setAnimationListener(new Animation.AnimationListener() {
-                                    @Override
-                                    public void onAnimationStart(Animation animation) {
-
-                                    }
-
-                                    @Override
-                                    public void onAnimationEnd(Animation animation) {
-                                        itemButton3.setBackgroundResource(R.color.transparent);
-                                    }
-
-                                    @Override
-                                    public void onAnimationRepeat(Animation animation) {
-
-                                    }
-                                });
-
-                            }
-
-                            @Override
-                            public void onAnimationRepeat(Animation animation) {
-
-                            }
-                        });
-                    } else {
-                        noItemMessage();
-                    }
-                }
-            });
-        }
+            }
+        });
     }
 
     private void changeRoom(final int roomId) {
 
-        Log.d(LOG_DATA, String.valueOf(x_cord));
-        Log.d(LOG_DATA, String.valueOf(y_cord));
+        nullifyAndRemoveButtonsFromParent();
+        createButtons();
         setItemButtons();
-        setPickUpItem();
 
         Animation fadeout = AnimationUtils.loadAnimation(context, R.anim.fade_out);
         roomImage.startAnimation(fadeout);
@@ -386,12 +270,12 @@ public class RoomFragment extends Fragment {
     }
 
     private void noItemMessage() {
-        Toast.makeText(context, "Nothing to be found here", Toast.LENGTH_LONG)
+        Toast.makeText(context, "There could have been an item here. But there is none.", Toast.LENGTH_SHORT)
                 .show();
     }
 
     private void informOfError() {
-        Toast.makeText(context, "Can't go this way", Toast.LENGTH_LONG)
+        Toast.makeText(context, "Can't go this way", Toast.LENGTH_SHORT)
                 .show();
     }
 
@@ -414,13 +298,113 @@ public class RoomFragment extends Fragment {
     }
 
     private void handleShake(int count) {
-        for (Button event : eventsInRoom) {
-            if (event != null) {
-                event.setVisibility(View.VISIBLE);
+        for (final Button event : eventsInRoom) {
+            if (!SaveUtility.alreadyHasItem(String.valueOf(event.getTag()))) {
+                event.setBackgroundResource(R.drawable.item_button);
                 event.startAnimation(animation);
-                event.setVisibility(View.INVISIBLE);
+                new Handler().postDelayed(new Runnable() {
+                                              @Override
+                                              public void run() {
+                                                  animation.cancel();
+                                                  event.setBackgroundResource(R.drawable.placeholder);
+
+                                              }
+                                          },
+                        500);
             }
         }
+    }
+
+    public void createButtons() {
+        String coordinates = String.valueOf(x_cord) + String.valueOf(y_cord);
+
+        switch (coordinates) {
+            case "00":
+                initiateButtons();
+                placeItems(root);
+                break;
+            default:
+                break;
+        }
+    }
+
+    public void initiateButtons() {
+        eventsInRoom.clear();
+        itemButton1 = new Button(context);
+        itemButton2 = new Button(context);
+        itemButton3 = new Button(context);
+        itemButton1.setTag(1);
+        itemButton2.setTag(2);
+        itemButton3.setTag(3);
+        itemButton1.setBackgroundResource(R.drawable.placeholder);
+        itemButton2.setBackgroundResource(R.drawable.placeholder);
+        itemButton3.setBackgroundResource(R.drawable.placeholder);
+        itemButton1.setId((R.id.item100));
+        itemButton2.setId((R.id.item200));
+        itemButton3.setId((R.id.item300));
+
+        eventsInRoom.add(itemButton1);
+        eventsInRoom.add(itemButton2);
+        eventsInRoom.add(itemButton3);
+
+        for (Button b : eventsInRoom) {
+            setItemClickListener(b);
+        }
+    }
+
+
+    public RelativeLayout placeItems(View root) {
+        Point size = new Point();
+        getActivity().getWindowManager().getDefaultDisplay().getSize(size);
+        int screenWidth = size.x;
+
+        int screenHeight = size.y - 100;
+        RelativeLayout mainRelativeLayout = (RelativeLayout) root.findViewById(R.id.mainRel);
+
+        RelativeLayout.LayoutParams params1 = getParams();
+//        RelativeLayout.LayoutParams params2 = getParams();
+//        RelativeLayout.LayoutParams params3 = getParams();
+
+        params1.setMargins((screenWidth / 2) + 200, (screenHeight / 3), 0, 0);
+        itemButton1.setMinWidth(50);
+        itemButton1.setMinimumWidth(50);
+        itemButton1.setMinHeight(50);
+        itemButton1.setLayoutParams(params1);
+        mainRelativeLayout.addView(itemButton1);
+
+        //---- adds a second button to the layout
+//        params2.setMargins((screenWidth - 100), 0, 0, 0);
+//        itemButton2.setMinWidth(0);
+//        itemButton2.setMinHeight(0);
+//        itemButton2.setLayoutParams(params2);
+//        mainRelativeLayout.addView(itemButton2);
+
+        //---- adds a third button to the layout
+//        params3.setMargins(200, (screenHeight / 3) * 2, 0, 0);
+//        itemButton3.setMinWidth(0);
+//        itemButton3.setMinHeight(0);
+//        itemButton3.setLayoutParams(params3);
+//        mainRelativeLayout.addView(itemButton3);
+
+
+        return mainRelativeLayout;
+    }
+
+    private void nullifyAndRemoveButtonsFromParent() {
+        RelativeLayout mainRelativeLayout = (RelativeLayout) root.findViewById(R.id.mainRel);
+        mainRelativeLayout.removeView(itemButton1);
+        mainRelativeLayout.removeView(itemButton2);
+        mainRelativeLayout.removeView(itemButton3);
+        itemButton1 = null;
+        itemButton2 = null;
+        itemButton3 = null;
+    }
+
+    private RelativeLayout.LayoutParams getParams() {
+        return new RelativeLayout.LayoutParams(
+                RelativeLayout.LayoutParams.WRAP_CONTENT,
+                RelativeLayout.LayoutParams.WRAP_CONTENT
+        );
     }
 
     @Override

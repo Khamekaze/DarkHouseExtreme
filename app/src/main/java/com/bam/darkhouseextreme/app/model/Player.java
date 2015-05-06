@@ -71,4 +71,43 @@ public class Player implements Serializable {
     public void setScore(int score) {
         this.score = score;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Player)) return false;
+
+        Player player = (Player) o;
+
+        if (id != player.id) return false;
+        if (mapXCoordinate != player.mapXCoordinate) return false;
+        if (mapYCoordinate != player.mapYCoordinate) return false;
+        if (score != player.score) return false;
+        if (name != null ? !name.equals(player.name) : player.name != null) return false;
+        return !(playerItems != null ? !playerItems.equals(player.playerItems) : player.playerItems != null);
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = (int) (id ^ (id >>> 32));
+        result = 31 * result + (name != null ? name.hashCode() : 0);
+        result = 31 * result + mapXCoordinate;
+        result = 31 * result + mapYCoordinate;
+        result = 31 * result + (playerItems != null ? playerItems.hashCode() : 0);
+        result = 31 * result + score;
+        return result;
+    }
+
+    @Override
+    public String toString() {
+        return "Player{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", mapXCoordinate=" + mapXCoordinate +
+                ", mapYCoordinate=" + mapYCoordinate +
+                ", playerItems=" + playerItems +
+                ", score=" + score +
+                '}';
+    }
 }
