@@ -49,7 +49,7 @@ public class CreateCharacterFragment extends Fragment {
                         String name = editText.getText().toString();
                         SaveUtility.createCharacter(name);
                         Intent intent = new Intent(context, GameActivity.class);
-                        startActivityForResult(intent, 1);
+                        startActivity(intent);
                     }
                 }
         );

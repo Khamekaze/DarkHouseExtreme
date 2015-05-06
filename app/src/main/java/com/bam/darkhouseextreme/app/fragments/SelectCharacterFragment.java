@@ -104,7 +104,7 @@ public class SelectCharacterFragment extends Fragment {
                 if (player != null) {
                     SaveUtility.loadCharacter(player);
                     Intent intent = new Intent(context, GameActivity.class);
-                    startActivityForResult(intent, 1);
+                    startActivity(intent);
                 } else {
                     Toast.makeText(context, "No character selected", Toast.LENGTH_SHORT).show();
                 }

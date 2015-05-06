@@ -2,6 +2,7 @@ package com.bam.darkhouseextreme.app.activities;
 
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentTransaction;
 import android.view.Window;
 import android.view.WindowManager;
 import com.bam.darkhouseextreme.app.R;
@@ -41,7 +42,10 @@ public class GameActivity extends FragmentActivity {
 
     @Override
     public void onBackPressed() {
-        setResult(1);
+        FragmentTransaction transaction = StartScreenActivity.activity.getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.startscreenlayout, StartScreenActivity.activity.getSupportFragmentManager().findFragmentByTag("startScreen"));
+        transaction.commitAllowingStateLoss();
+
         finish();
 
     }
