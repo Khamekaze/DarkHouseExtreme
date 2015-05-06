@@ -42,7 +42,7 @@ public class CharacterListAdapter extends ArrayAdapter<Player> {
         lastSelectedView = SelectCharacterFragment.lastSelectedView;
         View row = convertView;
 
-        PlayerHolder playerHolder = null;
+        PlayerHolder playerHolder;
         if (row == null) {
             LayoutInflater layoutInflater = LayoutInflater.from(context);
             row = layoutInflater.inflate(layoutResourceId, parent, false);
@@ -60,10 +60,6 @@ public class CharacterListAdapter extends ArrayAdapter<Player> {
         playerHolder.playerName.setText(player.getName());
         playerHolder.playerName.setTag(playerId);
         playerHolder.progress.setText(String.valueOf(player.getScore()));
-
-//        if (row != lastSelectedView) {
-//            row.setBackgroundResource(R.drawable.list_row_bg);
-//        }
 
         return row;
     }

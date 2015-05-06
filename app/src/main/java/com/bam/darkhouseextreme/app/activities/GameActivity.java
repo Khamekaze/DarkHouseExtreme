@@ -27,7 +27,6 @@ public class GameActivity extends FragmentActivity {
                     .add(R.id.gamelayout, new RoomFragment(), "room")
                     .commit();
         }
-
     }
 
     @Override
@@ -42,11 +41,16 @@ public class GameActivity extends FragmentActivity {
 
     @Override
     public void onBackPressed() {
-        FragmentTransaction transaction = StartScreenActivity.activity.getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.startscreenlayout, StartScreenActivity.activity.getSupportFragmentManager().findFragmentByTag("startScreen"));
+        FragmentTransaction transaction =
+                StartScreenActivity.activity.getSupportFragmentManager().beginTransaction();
+
+        transaction.replace(R.id.startscreenlayout,
+                StartScreenActivity.activity
+                        .getSupportFragmentManager()
+                        .findFragmentByTag("startScreen")
+        );
+
         transaction.commitAllowingStateLoss();
-
         finish();
-
     }
 }

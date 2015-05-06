@@ -45,21 +45,16 @@ public class StartScreenActivity extends FragmentActivity {
 
     @Override
     public void onBackPressed() {
-        final StartScreenFragment fragment = (StartScreenFragment) getSupportFragmentManager().findFragmentByTag("startScreen");
+        final StartScreenFragment fragment =
+                (StartScreenFragment) getSupportFragmentManager().findFragmentByTag("startScreen");
+
         if (fragment.isVisible()) {
             finish();
         } else {
-
-                    FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-                    transaction.setCustomAnimations(R.anim.back_enter, R.anim.back_exit);
-                    transaction.replace(R.id.startscreenlayout, fragment);
-                    transaction.commit();
-//                    getSupportFragmentManager().beginTransaction()
-//                            .replace(R.id.startscreenlayout, fragment)
-//                            .setCustomAnimations(R.anim.enter, R.anim.exit)
-//                            .commit();
-
-//            super.onBackPressed();
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            transaction.setCustomAnimations(R.anim.back_enter, R.anim.back_exit);
+            transaction.replace(R.id.startscreenlayout, fragment);
+            transaction.commit();
         }
     }
 }

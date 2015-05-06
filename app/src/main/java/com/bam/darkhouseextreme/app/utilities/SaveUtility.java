@@ -2,23 +2,16 @@ package com.bam.darkhouseextreme.app.utilities;
 
 import android.content.Context;
 import android.content.res.Resources;
-import android.util.Log;
-import android.widget.Button;
-
 import com.bam.darkhouseextreme.app.helper.DatabaseHelper;
 import com.bam.darkhouseextreme.app.model.Item;
 import com.bam.darkhouseextreme.app.model.Player;
 
-import java.security.acl.LastOwnerException;
 import java.util.List;
 
 /**
  * Created by Chobii on 30/04/15.
  */
 public class SaveUtility {
-
-    private static final String LOG_DATA = SaveUtility.class.getSimpleName();
-
 
     private static Player player;
     public static DatabaseHelper helper;
@@ -40,7 +33,6 @@ public class SaveUtility {
     public static void saveItemToCharacter(String itemID) {
         Item item = helper.getOneItem(itemID);
         boolean added = helper.addObjectToPlayerInventory(String.valueOf(player.getId()), String.valueOf(item.getId()));
-        Log.d(LOG_DATA, "Added to player inventory: " + added);
         player.getPlayerItems().add(item);
     }
 
@@ -61,7 +53,6 @@ public class SaveUtility {
     }
 
     public static int[] loadStats() {
-        Log.d("SaveUtility", "Load stats coordinates" + player.getMapYCoordinate());
         return new int[]{player.getMapXCoordinate(), player.getMapYCoordinate(), player.getScore()};
     }
 
@@ -69,11 +60,6 @@ public class SaveUtility {
 
         Item item = helper.getOneItem(itemID);
         List<Item> inventory = helper.getListOfPlayerItems(player.getId());
-        if (inventory.size() > 0) {
-            Log.d(LOG_DATA, "Item id: " + itemID + ", Inventory item id: " + inventory.get(0).getId());
-        }
-        Log.d(LOG_DATA, "Inventory length (DB): " + inventory.size());
-        Log.d("SaveUtility", "Already has item: " + inventory.contains(item));
         return inventory.contains(item);
     }
 }

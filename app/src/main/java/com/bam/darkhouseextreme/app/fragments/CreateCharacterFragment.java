@@ -48,8 +48,6 @@ public class CreateCharacterFragment extends Fragment {
                     public void onClick(View v) {
                         String name = editText.getText().toString();
                         SaveUtility.createCharacter(name, context.getResources());
-//                        helper = new DatabaseHelper(context);
-//                        Player player = helper.createCharacter(editText.getText().toString());
                         Intent intent = new Intent(context, GameActivity.class);
                         startActivity(intent);
                     }

@@ -4,12 +4,10 @@ import android.content.Context;
 import android.graphics.Point;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
-import android.graphics.Point;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,7 +19,6 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 import com.bam.darkhouseextreme.app.R;
 import com.bam.darkhouseextreme.app.adapter.Shaker;
-import com.bam.darkhouseextreme.app.helper.DatabaseHelper;
 import com.bam.darkhouseextreme.app.utilities.SaveUtility;
 import com.bam.darkhouseextreme.app.utilities.Utilities;
 
@@ -32,8 +29,6 @@ import java.util.List;
  * Created by Chobii on 29/04/15.
  */
 public class RoomFragment extends Fragment {
-
-    private final String LOG_DATA = RoomFragment.class.getSimpleName();
 
     private View root;
     private Button buttonUp, buttonDown, buttonLeft, buttonRight, itemButton1, itemButton2, itemButton3;
@@ -62,7 +57,7 @@ public class RoomFragment extends Fragment {
         shaker.setShakeListener(new Shaker.OnShakeListener() {
             @Override
             public void shake(int count) {
-                handleShake(count);
+                handleShake();
             }
         });
 
@@ -96,6 +91,14 @@ public class RoomFragment extends Fragment {
         return root;
     }
 
+    @Override
+    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
+        super.onViewStateRestored(savedInstanceState);
+
+        nullifyAndRemoveButtonsFromParent();
+        createButtons();
+        setItemButtons();
+    }
 
     private void setButtonUp() {
         buttonUp.setOnClickListener(
@@ -270,7 +273,7 @@ public class RoomFragment extends Fragment {
     }
 
     private void noItemMessage() {
-        Toast.makeText(context, "There could have been an item here. But there is none.", Toast.LENGTH_SHORT)
+        Toast.makeText(context, "There could have been an item here. But now there is none.", Toast.LENGTH_SHORT)
                 .show();
     }
 
@@ -297,7 +300,7 @@ public class RoomFragment extends Fragment {
         roomImage.setImageResource(roomId);
     }
 
-    private void handleShake(int count) {
+    private void handleShake() {
         for (final Button event : eventsInRoom) {
             if (!SaveUtility.alreadyHasItem(String.valueOf(event.getTag()))) {
                 event.setBackgroundResource(R.drawable.item_button);

@@ -2,7 +2,6 @@ package com.bam.darkhouseextreme.app.utilities;
 
 import android.content.Context;
 import android.graphics.Typeface;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -11,8 +10,6 @@ import android.widget.TextView;
  * Created by Chobii on 28/04/15.
  */
 public class Utilities {
-
-    private static final String LOG_DATA = Utilities.class.getSimpleName();
 
     /**
      * For each View in a ViewGroup, send the View to @code{setFontForView}.
@@ -29,7 +26,6 @@ public class Utilities {
                     setFontForView(layout.getChildAt(i), fonts);
                 }
             } catch (Exception e) {
-                Log.d(LOG_DATA, "Not a viable ViewGroup");
             }
         }
     }
@@ -53,7 +49,6 @@ public class Utilities {
                     setFontsForLayout((ViewGroup) view, fonts);
                 }
             } catch (Exception e) {
-                Log.d(LOG_DATA, "Not a viable View");
             }
         }
     }

@@ -7,9 +7,6 @@ import android.content.res.TypedArray;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-
-import android.util.Log;
-
 import com.bam.darkhouseextreme.app.R;
 import com.bam.darkhouseextreme.app.model.Item;
 import com.bam.darkhouseextreme.app.model.Player;
@@ -21,8 +18,6 @@ import java.util.List;
  * Created by Anders on 2015-04-28.
  */
 public class DatabaseHelper extends SQLiteOpenHelper {
-
-    private final String LOG_DATA = DatabaseHelper.class.getSimpleName();
 
     private static final String DATABASE_NAME = "DarkHouse.db";
     private static final int DATABASE_VERSION = 2;
@@ -78,10 +73,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.close();
 
         if (rowId == -1) {
-            Log.v(LOG_DATA, "Failed");
             return null;
         } else {
-            Log.v(LOG_DATA, "Success");
             return new Player(rowId, name);
         }
     }
@@ -144,10 +137,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         contentValues.put(ITEM_NAME, items.getString(0));
         contentValues.put(ITEM_DESCRIPTION, items.getString(1));
         long l = db.insert(ITEM_TABLE_NAME, null, contentValues);
-        if (l != -1) {
-            return true;
-        }
-        return false;
+
+        return l != -1;
     }
 
     public Item getOneItem(String id) {
