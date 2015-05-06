@@ -196,6 +196,7 @@ public class RoomFragment extends Fragment {
             itemButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    itemButton.setVisibility(View.VISIBLE);
                     itemButton.setClickable(false);
                     itemPickedUpTag = itemButton.getTag().toString();
                     final int itemID = Utilities.isViableItem(itemPickedUpTag, context, x_cord, y_cord);
@@ -315,11 +316,30 @@ public class RoomFragment extends Fragment {
 
     private void handleShake(int count) {
         Log.d(LOG_DATA, "shake that ass");
-        for (Button event : eventsInRoom) {
+        for (final Button event : eventsInRoom) {
             if (event != null) {
-                event.setVisibility(View.VISIBLE);
+//                event.setVisibility(View.VISIBLE);
                 event.startAnimation(animation);
-                event.setVisibility(View.INVISIBLE);
+                animation.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation animation) {
+                        Log.d(LOG_DATA, String.valueOf(animation.isInitialized()));
+                        event.setBackgroundResource(R.drawable.item_button);
+                    }
+
+                    @Override
+                    public void onAnimationEnd(Animation animation) {
+                        event.setBackgroundResource(R.drawable.placeholder);
+
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(Animation animation) {
+
+                    }
+                });
+
+//                event.setVisibility(View.INVISIBLE);
             }
         }
     }
@@ -338,6 +358,9 @@ public class RoomFragment extends Fragment {
         itemButton1.setBackgroundResource(R.drawable.placeholder);
         itemButton2.setBackgroundResource(R.drawable.placeholder);
         itemButton3.setBackgroundResource(R.drawable.placeholder);
+//        itemButton1.setVisibility(View.INVISIBLE);
+//        itemButton2.setVisibility(View.INVISIBLE);
+//        itemButton3.setVisibility(View.INVISIBLE);
         eventsInRoom.add(itemButton1);
         eventsInRoom.add(itemButton2);
         eventsInRoom.add(itemButton3);
