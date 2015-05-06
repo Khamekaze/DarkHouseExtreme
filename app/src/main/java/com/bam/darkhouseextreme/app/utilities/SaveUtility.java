@@ -13,7 +13,7 @@ import java.util.List;
 public class SaveUtility {
 
     private static Player player;
-    private static DatabaseHelper helper;
+    public static DatabaseHelper helper;
 
     public static void setHelper(Context context) {
         helper = new DatabaseHelper(context);

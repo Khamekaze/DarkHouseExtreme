@@ -23,7 +23,8 @@ public class GameActivity extends FragmentActivity {
         setContentView(R.layout.gameactivity);
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.gamelayout, new RoomFragment(), "room").commit();
+                    .add(R.id.gamelayout, new RoomFragment(), "room")
+                    .commit();
         }
 
     }

@@ -3,6 +3,7 @@
     <string name="darkhouse">Dark House of Mystery</string>
     <string name="new_game_button">New Game</string>
     <string name="load_game_button">Load Game</string>
+    <string name="quit_game_button">Quit</string>
     <string name="undecided_button">No Content</string>
     <string name="create">Create Character</string>
     <string name="ok">OK</string>

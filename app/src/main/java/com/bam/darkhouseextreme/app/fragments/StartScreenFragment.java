@@ -20,12 +20,8 @@ import com.bam.darkhouseextreme.app.utilities.Utilities;
  */
 public class StartScreenFragment extends Fragment {
 
-    public final String LOG_DATA = StartScreenFragment.class.getSimpleName();
-
-    public Button newGame, quit, loadGame;
-    public FragmentManager manager;
-    public ViewGroup container;
-
+    private Button newGame, quit, loadGame;
+    private FragmentManager manager;
     private Context context;
 
 
@@ -36,18 +32,16 @@ public class StartScreenFragment extends Fragment {
         context = getActivity().getApplicationContext();
 
         final Typeface font = Typeface.createFromAsset(context.getAssets(), "fonts/MISFITS_.TTF");
-
-        this.container = container;
+        final View root = inflater.inflate(R.layout.startscreenfragment, container, false);
 
         manager = getActivity().getSupportFragmentManager();
-
-        final View root = inflater.inflate(R.layout.startscreenfragment, container, false);
         newGame = (Button) root.findViewById(R.id.newGame);
         loadGame = (Button) root.findViewById(R.id.loadGameButton);
         quit = (Button) root.findViewById(R.id.quit);
 
         newGame();
         loadGame();
+        quitGame();
 
         Utilities.setFontForView(root, font);
 
@@ -56,7 +50,7 @@ public class StartScreenFragment extends Fragment {
     }
 
 
-    public void newGame() {
+    private void newGame() {
         newGame.setOnClickListener(
                 new View.OnClickListener() {
                     @Override
@@ -74,18 +68,32 @@ public class StartScreenFragment extends Fragment {
         );
     }
 
-    public void loadGame() {
-        loadGame.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FragmentTransaction transaction = manager.beginTransaction();
-                transaction.setCustomAnimations(R.anim.enter, R.anim.exit);
+    private void loadGame() {
+        loadGame.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
 
-                SelectCharacterFragment selectCharacterFragment = new SelectCharacterFragment();
-                transaction.replace(R.id.startscreenlayout, selectCharacterFragment);
-                transaction.addToBackStack(null);
-                transaction.commit();
-            }
-        });
+                        FragmentTransaction transaction = manager.beginTransaction();
+                        transaction.setCustomAnimations(R.anim.enter, R.anim.exit);
+
+                        SelectCharacterFragment selectCharacterFragment = new SelectCharacterFragment();
+                        transaction.replace(R.id.startscreenlayout, selectCharacterFragment);
+                        transaction.addToBackStack(null);
+                        transaction.commit();
+                    }
+                }
+        );
+    }
+
+    private void quitGame() {
+        quit.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        getActivity().finish();
+                    }
+                }
+        );
     }
 }

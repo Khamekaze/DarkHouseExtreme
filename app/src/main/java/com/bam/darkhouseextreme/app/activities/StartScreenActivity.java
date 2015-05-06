@@ -2,9 +2,8 @@ package com.bam.darkhouseextreme.app.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v4.app.FragmentActivity;
-import android.util.Log;
+import android.support.v4.app.FragmentTransaction;
 import android.view.Window;
 import android.view.WindowManager;
 import com.bam.darkhouseextreme.app.R;
@@ -17,7 +16,9 @@ public class StartScreenActivity extends FragmentActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        SaveUtility.setHelper(getApplicationContext());
+        if (SaveUtility.helper == null) {
+            SaveUtility.setHelper(getApplicationContext());
+        }
 
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
@@ -25,8 +26,8 @@ public class StartScreenActivity extends FragmentActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.startactivity);
-        StartScreenFragment fragment = new StartScreenFragment();
         if (savedInstanceState == null) {
+            StartScreenFragment fragment = new StartScreenFragment();
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.startscreenlayout, fragment, "startScreen")
                     .addToBackStack("StartScreen")
@@ -39,51 +40,35 @@ public class StartScreenActivity extends FragmentActivity {
         super.onSaveInstanceState(outState);
     }
 
-    //
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        // Inflate the menu; this adds items to the action bar if it is present.
-//        getMenuInflater().inflate(R.menu.menu_main, menu);
-//        return true;
-//    }
-//
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        // Handle action bar item clicks here. The action bar will
-//        // automatically handle clicks on the Home/Up button, so long
-//        // as you specify a parent activity in AndroidManifest.xml.
-//        int id = item.getItemId();
-//
-//        //noinspection SimplifiableIfStatement
-//        if (id == R.id.action_settings) {
-//            return true;
-//        }
-//
-//        return super.onOptionsItemSelected(item);
-//    }
-
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Log.d("Test", "got here");
-        Log.d("test", String.valueOf(requestCode) + ", " + String.valueOf(resultCode));
         if (resultCode == 1) {
-            new Handler().post(new Runnable() {
-                @Override
-                public void run() {
-                    getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.startscreenlayout, getSupportFragmentManager().findFragmentByTag("startScreen"))
-                            .commitAllowingStateLoss();
-                }
-            });
+            final StartScreenFragment fragment = (StartScreenFragment) getSupportFragmentManager().findFragmentByTag("startScreen");
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            transaction.setCustomAnimations(R.anim.back_enter, R.anim.back_exit);
+            transaction.replace(R.id.startscreenlayout, fragment);
+            transaction.commitAllowingStateLoss();
+
         }
     }
 
     @Override
     public void onBackPressed() {
-        StartScreenFragment fragment = (StartScreenFragment) getSupportFragmentManager().findFragmentByTag("startScreen");
+        final StartScreenFragment fragment = (StartScreenFragment) getSupportFragmentManager().findFragmentByTag("startScreen");
         if (fragment.isVisible()) {
             finish();
+        } else {
+
+                    FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+                    transaction.setCustomAnimations(R.anim.back_enter, R.anim.back_exit);
+                    transaction.replace(R.id.startscreenlayout, fragment);
+                    transaction.commit();
+//                    getSupportFragmentManager().beginTransaction()
+//                            .replace(R.id.startscreenlayout, fragment)
+//                            .setCustomAnimations(R.anim.enter, R.anim.exit)
+//                            .commit();
+
+//            super.onBackPressed();
         }
     }
 }

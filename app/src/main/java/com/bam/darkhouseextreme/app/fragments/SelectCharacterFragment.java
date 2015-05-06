@@ -2,7 +2,6 @@ package com.bam.darkhouseextreme.app.fragments;
 
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -26,20 +25,14 @@ import java.util.List;
  */
 public class SelectCharacterFragment extends Fragment {
 
-//    private DatabaseHelper helper;
     private Context context;
     private Button deleteBtn;
     private Button selectCharacterBtn;
-    private Cursor cursor;
     private List<Player> players = new ArrayList<>();
     private CharacterListAdapter characterListAdapter;
     private ListView characterListView;
-    private TextView characterNameView;
     private Player player;
     public static View lastSelectedView = null;
-
-    public final String LOG_DATA = StartScreenFragment.class.getSimpleName();
-
 
     @Nullable
     @Override
@@ -48,10 +41,6 @@ public class SelectCharacterFragment extends Fragment {
         final View root = inflater.inflate(R.layout.selectcharacterfragment, container, false);
         final Typeface fonts = Typeface.createFromAsset(context.getAssets(), "fonts/MISFITS_.TTF");
 
-//        helper = new DatabaseHelper(context);
-
-        //Change to players instead of cursor
-//        players = helper.getAllCharacters();
         players = SaveUtility.getAllCharacters();
 
         characterListView = (ListView) root.findViewById(R.id.characterList);
@@ -80,9 +69,6 @@ public class SelectCharacterFragment extends Fragment {
                 clearSelection();
                 lastSelectedView = view;
                 view.setBackgroundResource(R.drawable.selected_list_row_bg);
-
-                characterNameView = (TextView) view.findViewById(R.id.characterNameText);
-//                long playerId = (long) characterNameView.getTag();
                 player = players.get(position);
 
             }
@@ -118,7 +104,6 @@ public class SelectCharacterFragment extends Fragment {
                 if (player != null) {
                     SaveUtility.loadCharacter(player);
                     Intent intent = new Intent(context, GameActivity.class);
-//                    intent.putExtra("player", player);
                     startActivityForResult(intent, 1);
                 } else {
                     Toast.makeText(context, "No character selected", Toast.LENGTH_SHORT).show();

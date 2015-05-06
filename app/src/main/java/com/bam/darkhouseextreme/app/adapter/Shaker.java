@@ -4,25 +4,22 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-import android.util.Log;
 
 /**
  * Created by Chobii on 04/05/15.
  */
 public class Shaker implements SensorEventListener {
 
-    private final String LOG_DATA = Shaker.class.getSimpleName();
-
     private final static float SHAKE_THRESHOLD = 2.5f;
     private final static int SHAKE_SLOP_TIME_IN_MS = 2000;
     private final static int SHAKE_RESET_TIME_IN_MS = 10000;
 
-    private OnShakeListener shakeListener;
     private long shakeTimeStamp;
     private int shakeCount;
 
+    private OnShakeListener shakeListener;
+
     public void setShakeListener(OnShakeListener listener) {
-        Log.d(LOG_DATA, "Initialized");
         shakeListener = listener;
     }
 
@@ -45,7 +42,6 @@ public class Shaker implements SensorEventListener {
                 final long now = System.currentTimeMillis();
 
                 if (shakeTimeStamp + SHAKE_SLOP_TIME_IN_MS > now) {
-                    Log.d(LOG_DATA, "shaked");
                     return;
                 }
 
@@ -59,14 +55,12 @@ public class Shaker implements SensorEventListener {
                 shakeListener.shake(shakeCount);
             }
         }
-
     }
 
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
 
     }
-
 
     public interface OnShakeListener {
         void shake(int count);

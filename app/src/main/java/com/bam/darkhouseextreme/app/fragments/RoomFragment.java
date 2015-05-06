@@ -1,10 +1,9 @@
 package com.bam.darkhouseextreme.app.fragments;
 
 import android.content.Context;
+import android.graphics.Point;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
-import android.content.res.TypedArray;
-import android.graphics.Point;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -17,7 +16,6 @@ import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
-
 import com.bam.darkhouseextreme.app.R;
 import com.bam.darkhouseextreme.app.adapter.Shaker;
 import com.bam.darkhouseextreme.app.helper.DatabaseHelper;
@@ -402,7 +400,6 @@ public class RoomFragment extends Fragment {
         final int roomId;
         if ((roomId = Utilities.isViableRoom(room, context)) != 0) {
             changeRoom(roomId);
-            Log.d(LOG_DATA, String.valueOf(x) + ", " + String.valueOf(y) + ", " + String.valueOf(score));
             SaveUtility.saveProgress(x, y, score += 10);
             return true;
         } else return false;
@@ -417,7 +414,6 @@ public class RoomFragment extends Fragment {
     }
 
     private void handleShake(int count) {
-        Log.d(LOG_DATA, "shake that ass");
         for (Button event : eventsInRoom) {
             if (event != null) {
                 event.setVisibility(View.VISIBLE);

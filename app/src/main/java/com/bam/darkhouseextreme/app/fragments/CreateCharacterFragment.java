@@ -23,9 +23,7 @@ public class CreateCharacterFragment extends Fragment {
 
     public Button ok;
     private EditText editText;
-//    private TextView txtV;
     private Context context;
-//    private DatabaseHelper helper;
 
     @Nullable
     @Override
@@ -34,11 +32,9 @@ public class CreateCharacterFragment extends Fragment {
         context = getActivity().getApplicationContext();
 
         final Typeface fonts = Typeface.createFromAsset(context.getAssets(), "fonts/MISFITS_.TTF");
-
         final View root = inflater.inflate(R.layout.createcharacterfragment, container, false);
         ok = (Button)root.findViewById(R.id.okGo);
         editText = (EditText)root.findViewById(R.id.createEdit);
-//        txtV = (TextView)root.findViewById(R.id.createText);
 
         Utilities.setFontForView(root, fonts);
         setGo();
@@ -52,10 +48,7 @@ public class CreateCharacterFragment extends Fragment {
                     public void onClick(View v) {
                         String name = editText.getText().toString();
                         SaveUtility.createCharacter(name);
-//                        helper = new DatabaseHelper(context);
-//                        Player player = helper.createCharacter(editText.getText().toString());
                         Intent intent = new Intent(context, GameActivity.class);
-//                        intent.putExtra("player", player);
                         startActivityForResult(intent, 1);
                     }
                 }
