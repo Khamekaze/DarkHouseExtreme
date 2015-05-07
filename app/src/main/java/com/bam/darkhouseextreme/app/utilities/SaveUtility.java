@@ -46,7 +46,7 @@ public class SaveUtility {
 
     public static void createCharacter(String name, Resources resources) {
         player = helper.createCharacter(name);
-        helper.createItem(resources);
+        helper.createAllItems(resources);
         player.setMapXCoordinate(0);
         player.setMapYCoordinate(1);
         helper.updateCharacter(String.valueOf(player.getId()), String.valueOf(0), String.valueOf(1), 0);
