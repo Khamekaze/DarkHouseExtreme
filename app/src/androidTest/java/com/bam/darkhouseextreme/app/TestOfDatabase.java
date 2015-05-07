@@ -26,6 +26,8 @@ public class TestOfDatabase extends AndroidTestCase {
         super.setUp();
         RenamingDelegatingContext context = new RenamingDelegatingContext(getContext(), "_test");
         helper = new DatabaseHelper(context);
+        player = helper.createCharacter("John");
+        item = helper.createOneItem("Pointed Stick", "A pointed stick");
     }
 
     @Override
@@ -36,7 +38,7 @@ public class TestOfDatabase extends AndroidTestCase {
     public void testCRUD() {
         // Test Add Character.
         String name = "Akana";
-        player = helper.createCharacter(name);
+        Player player = helper.createCharacter(name);
         assertEquals(name, player.getName());
         // Test Update Character.
         boolean updated = helper.updateCharacter(String.valueOf(player.getId()), "0", "1", 100);
@@ -50,7 +52,7 @@ public class TestOfDatabase extends AndroidTestCase {
         // Test Add Item
         String itemName = "Shit on a stick";
         String itemDescription = "A crude stick that has been dipped in what appears to be shit";
-        item = helper.createOneItem(itemName, itemDescription);
+        Item item = helper.createOneItem(itemName, itemDescription);
         assertEquals(itemName, item.getName());
     }
 
@@ -58,5 +60,10 @@ public class TestOfDatabase extends AndroidTestCase {
         Resources resources = getContext().getResources();
         boolean allItemsCreated = helper.createAllItems(resources);
         assertTrue(allItemsCreated);
+    }
+
+    public void testAddItemToPlayerInventory() {
+        boolean addedItemToPlayerInventory = helper.addItemToPlayerInventory(String.valueOf(player.getId()), String.valueOf(item.getId()));
+        assertTrue(addedItemToPlayerInventory);
     }
 }

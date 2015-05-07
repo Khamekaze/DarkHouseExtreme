@@ -32,7 +32,7 @@ public class SaveUtility {
 
     public static void saveItemToCharacter(String itemID) {
         Item item = helper.getOneItem(itemID);
-        boolean added = helper.addObjectToPlayerInventory(String.valueOf(player.getId()), String.valueOf(item.getId()));
+        boolean added = helper.addItemToPlayerInventory(String.valueOf(player.getId()), String.valueOf(item.getId()));
         player.getPlayerItems().add(item);
     }
 

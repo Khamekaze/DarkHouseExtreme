@@ -119,7 +119,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         } else return false;
     }
 
-    public boolean addObjectToPlayerInventory(String playerId, String itemId) {
+    public boolean addItemToPlayerInventory(String playerId, String itemId) {
         db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(JUNCTION_TABLE_PLAYER_ID, playerId);
