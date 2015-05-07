@@ -130,6 +130,19 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return rowId != -1;
     }
 
+    public Item createOneItem(String itemName, String itemDescription) {
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(ITEM_NAME, itemName);
+        contentValues.put(ITEM_DESCRIPTION, itemDescription);
+        long rowId = db.insert(ITEM_TABLE_NAME, null, contentValues);
+
+        if (rowId != -1) {
+            return new Item(rowId, itemName, itemDescription);
+        } else {
+            return null;
+        }
+    }
+
     public boolean createAllItems(Resources res) {
         db = this.getWritableDatabase();
         TypedArray items = res.obtainTypedArray(R.array.items);
