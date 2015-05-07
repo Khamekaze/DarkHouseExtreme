@@ -131,6 +131,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     public Item createOneItem(String itemName, String itemDescription) {
+        db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(ITEM_NAME, itemName);
         contentValues.put(ITEM_DESCRIPTION, itemDescription);
