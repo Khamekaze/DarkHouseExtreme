@@ -185,9 +185,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 //    }
 
 
-    private Cursor getAllItemsFromCharacter(long id) {
+    private Cursor getAllItemsFromCharacter(long playerId) {
         db = this.getReadableDatabase();
-        String[] selection = {String.valueOf(id)};
+        String[] selection = {String.valueOf(playerId)};
         Cursor cursor = db.rawQuery("SELECT * FROM " + ITEM_TABLE_NAME + " AS I JOIN " + PLAYER_ITEM_JUNCTION_TABLE_NAME + " AS PI ON I." + ITEM_ID + " = PI." + JUNCTION_TABLE_ITEM_ID + " WHERE PI." + JUNCTION_TABLE_PLAYER_ID + " = ?", selection);
         return cursor;
     }
@@ -208,8 +208,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return players;
     }
 
-    public List<Item> getListOfPlayerItems(long id) {
-        Cursor cursor = getAllItemsFromCharacter(id);
+    public List<Item> getListOfPlayerItems(long playerId) {
+        Cursor cursor = getAllItemsFromCharacter(playerId);
         List<Item> playerItems = new ArrayList<>();
         while (cursor.moveToNext()) {
             Item item = new Item();

@@ -4,10 +4,12 @@ import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.test.AndroidTestCase;
 import android.test.RenamingDelegatingContext;
+
 import com.bam.darkhouseextreme.app.helper.DatabaseHelper;
 import com.bam.darkhouseextreme.app.model.Item;
 import com.bam.darkhouseextreme.app.model.Player;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -20,6 +22,7 @@ public class TestOfDatabase extends AndroidTestCase {
     private Player player;
     private Item item;
     private DatabaseHelper helper;
+    private List<Item> items = new ArrayList<>();
 
     @Override
     protected void setUp() throws Exception {
@@ -65,5 +68,11 @@ public class TestOfDatabase extends AndroidTestCase {
     public void testAddItemToPlayerInventory() {
         boolean addedItemToPlayerInventory = helper.addItemToPlayerInventory(String.valueOf(player.getId()), String.valueOf(item.getId()));
         assertTrue(addedItemToPlayerInventory);
+    }
+
+    public void testGetListOfPlayerItems() {
+        helper.addItemToPlayerInventory(String.valueOf(player.getId()), String.valueOf(item.getId()));
+        items = helper.getListOfPlayerItems(player.getId());
+        assertTrue(items.size() != 0);
     }
 }
