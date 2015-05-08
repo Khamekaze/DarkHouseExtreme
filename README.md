@@ -40,3 +40,4 @@ To build and run from this code, you have to first uninstall the signed copy on 
 - [MrPoppa](https://github.com/MrPoppa)
 - [Andersrapp](https://github.com/Andersrapp)
 - [ChobiJava](https://github.com/ChobiJava)
+- [RonerReked](https://github.com/RonerReked)
