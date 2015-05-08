@@ -305,14 +305,14 @@ public class RoomFragment extends Fragment {
             if (!SaveUtility.alreadyHasItem(String.valueOf(event.getTag()))) {
                 event.setBackgroundResource(R.drawable.item_button);
                 event.startAnimation(animation);
-                new Handler().postDelayed(new Runnable() {
-                                              @Override
-                                              public void run() {
-                                                  animation.cancel();
-                                                  event.setBackgroundResource(R.drawable.placeholder);
-
-                                              }
-                                          },
+                new Handler().postDelayed(
+                        new Runnable() {
+                              @Override
+                              public void run() {
+                                  animation.cancel();
+                                  event.setBackgroundResource(R.drawable.placeholder);
+                              }
+                          },
                         500);
             }
         }
