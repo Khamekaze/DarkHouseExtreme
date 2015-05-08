@@ -9,11 +9,18 @@ To report or view any issues or bugs, please see visit the [Issues](https://gith
 ## Building
 ### Gradle
 The easiest way to build anr un the project is with [Android Studio](https://developer.android.com/sdk/index.html) v1.+.
-
+#### Eclipse
 1. Open "File".
 2. Import Project.
 3. Select "Build.gradle" under project directory.
 4. Click "OK".
+
+#### IntelliJ
+1. File -> New.
+2. Project from existing source
+3. Import project from external source -> gradle.
+4. Use customizable gradle wrapper.
+5. Finish.
 
 Gradle will then handle everything and build the project.
 
